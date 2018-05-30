@@ -5,17 +5,23 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { ProjectsComponent } from './projects.component';
+import { GithubComponent } from './github/github.component';
 
 const routes = [
     {
         path     : 'projects',
         component: ProjectsComponent
-    }
+    },
+    {
+      path     : 'projects/github',
+      component: GithubComponent
+  },
 ];
 
 @NgModule({
     declarations: [
-      ProjectsComponent
+      ProjectsComponent,
+      GithubComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -25,7 +31,8 @@ const routes = [
         FuseSharedModule
     ],
     exports     : [
-      ProjectsComponent
+      ProjectsComponent,
+      GithubComponent
     ]
 })
 
