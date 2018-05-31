@@ -7,24 +7,10 @@ export const navigation = [
         'url'  : '/home',
     },    
     {
-        'id'   : 'sample',
-        'title': 'Sample',
-        'translate': 'NAV.SAMPLE.TITLE',
-        'type' : 'item',
-        'icon' : 'email',
-        'url'  : '/sample',      
-    },
-    {
         'id'      : 'projects',
         'title'   : 'Projects',
         'type'    : 'group',
-        'children': [
-            {
-                'id'   : 'intro',
-                'title': 'Introduction',
-                'type' : 'item',                
-                'url'  : '/projects'
-            },
+        'children': [    
             {
                 'id'   : 'githum',
                 'title': 'Github',
@@ -35,7 +21,69 @@ export const navigation = [
                     'bg'   : '#525e8a',
                     'fg'   : '#FFFFFF'
                 }
-            }
+            },
+            {
+                'id'   : 'conversant',
+                'title': 'Conversant',
+                'type' : 'item',                
+                'url'  : '/project/conversant'
+            },
+            {
+                'id'   : 'daytrader',
+                'title': 'DayTrader.ai',
+                'type' : 'item',                
+                'url'  : '/project/daystrader'
+            },
+            {
+                'id'   : 'playquest',
+                'title': 'PlayQuest',
+                'type' : 'item',                
+                'url'  : '/project/playquest'
+            },
+            {
+                'id'   : 'flexfwd',
+                'title': 'FlexFWD',
+                'type' : 'item',                
+                'url'  : '/project/flexfwd'
+            },
+            {
+                'id'   : 'aftercad',
+                'title': 'AfterCAD',
+                'type' : 'item',                
+                'url'  : '/project/aftercad'
+            },
+            {
+                'id'   : 'cg',
+                'title': 'Computer Graphics',
+                'type' : 'item',                
+                'url'  : '/project/cg'
+            },
+        ]
+    },
+    {
+        'id'      : 'games',
+        'title'   : 'Games',
+        'type'    : 'group',
+        'children': [
+            {
+                'id'   : 'game1',
+                'title': 'Introduction',
+                'type' : 'item',                
+                'url'  : '/projects'
+            },
+        ]
+    },
+    {
+        'id'      : 'design',
+        'title'   : 'Design',
+        'type'    : 'group',
+        'children': [
+            {
+                'id'   : 'design1',
+                'title': 'Introduction',
+                'type' : 'item',                
+                'url'  : '/projects'
+            },
         ]
     }
 ];

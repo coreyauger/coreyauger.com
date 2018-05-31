@@ -36,6 +36,7 @@ export class GithubService {
         if (err) {
           observer.error(err);
         }
+        console.log('repos', repos);
         observer.next(repos);
         observer.complete();
       });

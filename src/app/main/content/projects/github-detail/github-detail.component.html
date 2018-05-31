@@ -24,10 +24,10 @@
 
               <!-- CONTENT -->
               <div class="content p-24" fusePerfectScrollbar>
-                  
-                  
-                  <markdown-to-html [data]="markdown"></markdown-to-html>
-                  
+                <div>  
+                <a target="_blank" href="{{repo.html_url}}">{{repo.html_url}}</a>   
+                <markdown-to-html [data]="markdown"></markdown-to-html>
+                </div>
               </div>
               <!-- / CONTENT -->
 
