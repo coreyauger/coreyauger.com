@@ -1,32 +1,39 @@
-<div class="page-layout carded fullwidth" fusePerfectScrollbar>
+<div class="page-layout carded right-sidenav" fusePerfectScrollbar>
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg mat-accent-bg"></div>
     <!-- / TOP BACKGROUND -->
 
-    <!-- CENTER -->
-    <div class="center">
+    <mat-sidenav-container>
 
-        <!-- CONTENT HEADER -->
-        <div class="header white-fg p-24" fxLayout="row" fxLayoutAlign="start center">
-            <h2>AFFINE TECHNOLOGY</h2>
-        </div>
-        <!-- / CONTENT HEADER -->
+        <!-- CENTER -->
+        <div class="center">
 
-        <!-- CONTENT CARD -->
-        <div class="content-card mat-white-bg">
-
-            <!-- CONTENT TOOLBAR -->
-            <div class="toolbar px-24 py-8">
-                <span>The Shenanigans of Corey Auger</span>
+            <!-- CONTENT HEADER -->
+            <div class="header white-fg p-24">
+                <h2>AFFINE TECHNOLOGY</h2>
             </div>
-            <!-- / CONTENT TOOLBAR -->
+            <!-- / CONTENT HEADER -->
 
-            <!-- CONTENT -->
-            <div class="content p-24" fusePerfectScrollbar>
+            <!-- CONTENT CARD -->
+            <div class="content-card mat-white-bg">
 
+                <!-- CONTENT TOOLBAR -->
+                <div class="toolbar px-24 py-8">
+                    <button mat-icon-button class="sidenav-toggle"
+                            fuseMatSidenavToggler="carded-right-sidenav"
+                            fxHide.gt-md>
+                        <mat-icon>menu</mat-icon>
+                    </button>
 
+                    <span>The Shenanigans of Corey Auger</span>
+                </div>
+                <!-- / CONTENT TOOLBAR -->
 
+                <!-- CONTENT -->
+                <div class="content p-24" fusePerfectScrollbar>
+
+                    
                 <div class="demo-content">
 
                     <img src="assets/images/family.jpg" alt="family" style="max-width: 640px; width: 100%;">
@@ -54,26 +61,7 @@
                         elit. Vivamus sed lorem quis nibh porta iaculis. Vestibulum ut eleifend ante, at semper mi. Nam imperdiet est
                         nisi, quis hendrerit tellus convallis et. Morbi in luctus neque. Curabitur elementum ut est et gravida. In hac
                         habitasse platea dictumst.
-                    </p>
-
-                    <h2>Resume</h2>
-                    <h4 class="secondary-text">A more than likely, outdated resume ;).</h4>
-                    <p>
-                        <a target="_blank" href="assets/Corey-Auger.pdf">Resume</a>
-                    </p>
-                
-                    <p>
-                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Class aptent taciti
-                        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur vitae sagittis odio.
-                        Suspendisse ullamcorper nunc non pellentesque laoreet. Curabitur eu tortor id quam pretium mattis. Proin ut quam
-                        velit.
-                    </p>
-                
-                    <p>
-                        Quisque sit amet risus enim. Aliquam sit amet interdum justo, at ultricies sapien. Suspendisse et semper urna,
-                        in gravida eros. Quisque id nibh iaculis, euismod urna sed, egestas nisi. Donec eros metus, congue a imperdiet
-                        feugiat, sagittis nec ipsum. Quisque dapibus mollis felis non tristique.
-                    </p>
+                    </p>                   
                 
                     <p>
                         Ut auctor, metus sed dapibus tempus, urna diam auctor odio, in malesuada odio risus vitae nisi. Etiam blandit
@@ -99,15 +87,81 @@
                     </p>
                 </div>
 
+                </div>
+                <!-- / CONTENT -->
 
-             
             </div>
-            <!-- / CONTENT -->
+            <!-- / CONTENT CARD -->
 
         </div>
-        <!-- / CONTENT CARD -->
+        <!-- / CENTER -->
 
-    </div>
-    <!-- / CENTER -->
+        <!-- SIDENAV -->
+        <mat-sidenav class="sidenav" position="end" opened="true" mode="side"
+                     fuseMatSidenavHelper="carded-right-sidenav" mat-is-locked-open="gt-md">
+
+            <!-- SIDENAV HEADER -->
+            <div class="header p-24" ngClass="mat-accent-bg" ngClass.gt-md="white-fg">
+                <h2></h2>
+            </div>
+            <!-- / SIDENAV HEADER -->
+
+            <!-- SIDENAV CONTENT -->
+            <div class="content p-24" fusePerfectScrollbar>
+
+                
+                <div class="demo-sidenav">
+                    <mat-list>
+                        <h3 matSubheader>Links</h3>
+                
+                        <mat-divider></mat-divider>
+                
+                        <mat-list-item>
+                            <a target="_blank" href="assets/Corey-Auger.pdf">Resume</a>
+                        </mat-list-item>
+
+                        <mat-divider></mat-divider>
+
+                        <mat-list-item>
+                            <a target="_blank" href="https://medium.com/@coreyauger">Blog</a>
+                        </mat-list-item>
+                
+                        <mat-divider></mat-divider>
+                
+                        <mat-list-item>
+                            <a target="_blank" href="https://github.com/coreyauger">Github</a>
+                        </mat-list-item>
+                
+                        <mat-divider></mat-divider>
+                
+                        <mat-list-item>
+                            <a target="_blank" href="https://twitter.com/coreyauger">Twitter</a>
+                        </mat-list-item>
+                
+                        <mat-divider></mat-divider>
+                
+                        <mat-list-item>
+                            <a target="_blank" href="https://www.linkedin.com/in/coreyauger/">LinkedIn</a>
+                        </mat-list-item>
+                
+                        <mat-divider></mat-divider>
+                
+                        <mat-list-item>
+                            <a target="_blank" href="https://www.pinterest.ca/coreynauger/">Pinterest</a>
+                        </mat-list-item>
+                        
+                
+                    </mat-list>
+                </div>
+                
+
+
+            </div>
+            <!-- / SIDENAV CONTENT -->
+
+        </mat-sidenav>
+        <!-- / SIDENAV -->
+
+    </mat-sidenav-container>
 
 </div>

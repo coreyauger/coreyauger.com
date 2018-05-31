@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
-
+import { AngularMaterialModule } from './../../angular-material/angular-material.module';
 import { HomeComponent } from './home.component';
 
 const routes = [
@@ -23,7 +23,8 @@ const routes = [
 
         TranslateModule,
 
-        FuseSharedModule
+        FuseSharedModule,
+        AngularMaterialModule
     ],
     exports     : [
       HomeComponent

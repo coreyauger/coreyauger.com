@@ -52,6 +52,7 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
 
         // Get the nav model and add customize nav item
         // that opens the bar programmatically
+        /*
         const nav: any = this.navigation;
 
         nav.push({
@@ -70,6 +71,7 @@ export class FuseThemeOptionsComponent implements OnInit, OnDestroy
                 }
             ]
         });
+        */
     }
 
     ngOnDestroy()

@@ -1,23 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import * as GitHub from 'github-api';
-
-const gh = new GitHub();
-var coreyauger = gh.getUser('coreyauger');
-coreyauger.listRepos(function(err, repos) {
-   // look at all the starred repos!
-   console.log("repos", repos)
-});
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { GithubService, Repository } from '../../../../github.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'fuse-app-github',
   templateUrl: './github.component.html',
-  styleUrls: ['./github.component.scss']
+  styleUrls: ['./github.component.scss'],
+  animations   : fuseAnimations
 })
-export class GithubComponent implements OnInit {
+export class GithubComponent implements OnInit, OnDestroy {
+  repos: Repository[];
+  filteredRepos: Repository[]; 
 
-  constructor() { }
+  constructor(private githubService: GithubService) { }
 
-  ngOnInit() {
+  reposSubscription: Subscription;
+
+
+  ngOnInit(){
+      this.reposSubscription = this.githubService.getRepos('coreyauger')
+        .subscribe(repos => this.filteredRepos = this.repos = repos);
+
+  }
+
+  ngOnDestroy(){
+      this.reposSubscription.unsubscribe();      
   }
 
 }

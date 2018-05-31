@@ -1,0 +1,40 @@
+<div class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+    
+        <!-- CENTER -->
+      <div class="center">
+
+          <!-- CONTENT HEADER -->
+          <div class="header white-fg p-24" fxLayout="row" fxLayoutAlign="start center">
+              <h2 *ngIf="repo">{{repo.name}}</h2>
+          </div>
+          <!-- / CONTENT HEADER -->
+
+          <!-- CONTENT CARD -->
+          <div class="content-card mat-white-bg"  *ngIf="repo">
+
+              <!-- CONTENT TOOLBAR -->
+              <div class="toolbar px-24 py-8">
+                  <span>{{repo.description}}</span>
+              </div>
+              <!-- / CONTENT TOOLBAR -->
+
+              <!-- CONTENT -->
+              <div class="content p-24" fusePerfectScrollbar>
+                  
+                  
+                  <markdown-to-html [data]="markdown"></markdown-to-html>
+                  
+              </div>
+              <!-- / CONTENT -->
+
+          </div>
+          <!-- / CONTENT CARD -->
+
+      </div>
+    <!-- / CENTER -->
+
+</div>

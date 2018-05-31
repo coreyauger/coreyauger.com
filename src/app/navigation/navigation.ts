@@ -7,26 +7,12 @@ export const navigation = [
         'url'  : '/home',
     },    
     {
-        'id'      : 'applications',
-        'title'   : 'Applications',
-        'translate': 'NAV.APPLICATIONS',
-        'type'    : 'group',
-        'children': [
-            {
-                'id'   : 'sample',
-                'title': 'Sample',
-                'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                'icon' : 'email',
-                'url'  : '/sample',
-                'badge': {
-                    'title': 25,
-                    'translate': 'NAV.SAMPLE.BADGE',
-                    'bg'   : '#F44336',
-                    'fg'   : '#FFFFFF'
-                }
-            }
-        ]
+        'id'   : 'sample',
+        'title': 'Sample',
+        'translate': 'NAV.SAMPLE.TITLE',
+        'type' : 'item',
+        'icon' : 'email',
+        'url'  : '/sample',      
     },
     {
         'id'      : 'projects',
@@ -46,7 +32,7 @@ export const navigation = [
                 'url'  : '/github',
                 'badge': {
                     'title': 112,
-                    'bg'   : '#F44336',
+                    'bg'   : '#525e8a',
                     'fg'   : '#FFFFFF'
                 }
             }
