@@ -13,7 +13,7 @@ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
 
 const routes = [
     {
-        path     : 'projects',
+        path     : 'project/:id',
         component: ProjectsComponent
     },
     {
