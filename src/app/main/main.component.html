@@ -39,11 +39,13 @@
                 <fuse-content></fuse-content>
 
                 <!-- FOOTER: Below -->
+                <!--
                 <ng-container *ngIf="fuseSettings.layout.footer === 'below'">
                     <fuse-footer class="below" [ngClass]="fuseSettings.colorClasses.footer"></fuse-footer>
                 </ng-container>
+                -->
                 <!-- / FOOTER: Below -->
-
+            
             </div>
 
             <!-- NAVBAR: Right -->
@@ -59,17 +61,21 @@
         </div>
 
         <!-- FOOTER: Above -->
+        <!--
         <ng-container *ngIf="fuseSettings.layout.footer === 'above'">
             <fuse-footer class="above" [ngClass]="fuseSettings.colorClasses.footer"></fuse-footer>
         </ng-container>
+        -->
         <!-- FOOTER: Above -->
 
     </div>
 
     <!-- QUICK PANEL -->
+    <!--
     <mat-sidenav fuseMatSidenavHelper="quick-panel" position="end">
         <fuse-quick-panel></fuse-quick-panel>
     </mat-sidenav>
+    -->
     <!-- / QUICK PANEL -->
 
 </mat-sidenav-container>

@@ -1,0 +1,447 @@
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">radiosity</h1>
+    <p class="post-meta"><time datetime="2005-10-30T00:00:00+00:00" itemprop="datePublished">2005</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <article>
+ 
+  <p>Name: Radiosity<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Linux<br>
+    Authors: Auger, Corey and Wecker, Lakin<br>
+  </p>
+
+  <p><b>1. Project Goal</b></p>
+  <p>We plan on creating computer generated images of the best
+    quality through a synthesis of Radiosity and Ray Tracing. This
+    combination will allow us to simulate the diffuse, and specular
+    interactions in complex environments. Because both methods are
+    time consuming we will be using acceleration techniques in both.</p>
+  <p>These techniques include:</p>
+  <ul>
+    <li><p>Octree generation for fast spatial determination.
+    </p>
+    </li><li><p>Using graphics hardware Z-buffer for visibility
+      determination in radiosity solution.
+    </p>
+    </li><li><p>Saving information into texture memory.
+    </p>
+    </li><li><p>Mini-mapping hemi-cube information for form factor
+      calculations.
+    </p>
+    </li><li><p>Distributed Ray Tracing techniques to simulate imperfect
+      reflections.
+    </p>
+  </li></ul>
+  <hr>
+  <p><b>2. Motivation</b></p>
+  <p>Computer generated images typically concentrate on one portion
+    of the lighting equation: either diffuse or specular lighting.
+    Recently, new algorithms, new data structures and concepts have
+    been researched to represent a more complete view of the lighting
+    in increasingly complex environments. The radiosity approach stems
+    from the want to simulate indoor environments where diffuse
+    lighting is the primary mode of heat transfer. Ray tracing
+    surfaced to simulate the way rays interact with reflective and
+    specular surfaces. These two approaches are typically separated,
+    however by combining the two one can look at both parts of the
+    lighting equation. This is extremely useful in indoor environments
+    with shiny reflective objects.</p>
+  <hr>
+  <p><b>3. Key Technical Challenges</b></p>
+  <p><i>Radiosity</i>
+  </p>
+  <p>With regards to radiosity the key challenges lie in the speed
+    and accuracy of the solution. We plan to exploit modern graphics
+    hardware to aid in the visibility and form factor calculations.
+    The main challenges will be with regard to the accuracy of the
+    solution. We plan on having a very adaptive solution to allow us
+    to experiment with different thresholds.</p>
+  <p>Additional challenges for the radiosity section is going to
+    come from 'tight' geometry. We would like our solution to be able
+    to handle models of any shape and complexity. With a hemi-cube
+    approach this will pose problems in tight corners where the
+    hemi-cube protrudes into geometry, or sees right through a faces
+    in the geometry. In this case we are going to have to test the
+    area around the hemi-cube and do some work to not allow the
+    hemi-cube to pierce the geometry.</p>
+  <p><i>Ray Tracer</i>
+  </p>
+  <p>The Key technical challenge for the ray tracer will be the
+    lighting model to use when combining the final information into a
+    pixel color to display on the screen. There will be texture
+    mapping details, the light map representing the diffuse and
+    ambient lighting for the triangle, as well as the specular
+    information gathered by the ray tracer. We plan to use
+    Cook-Torrance lighting to achieve a more realistic colors and
+    images.
+  </p>
+  <hr>
+  <p><b>4. Approach</b></p>
+  <p><b>4.1 Overview</b></p>
+  <p><i>Radiosity</i>
+  </p>
+  <p>Dividing each face of our scene into light-map texel regions,
+    we are going to perform a gathering type of radiosity solution.
+    First by using GL to render the scene from the perspective of a
+    texel into a hemi-cubed texture map, we solve the visibility
+    problem. After applying a lambertian mask over the pixels and
+    perspective correction we then evaluate the hemi-cube as a 1x1
+    mini-map. This will be our form-factor calculation. This value
+    gets stored in the light-map location that was being evaluated.
+    This continues until we have converged on a solution. To further
+    speed this process up we would only calculate (in between) pixels
+    if they did not meet an interpolation threshold. This will allow
+    for adaptive sampling at shadow boundaries. Additionally our scene
+    is in an Octree format, so we will perform frustum culling and
+    only pass vertices's to the renderer that the point can see. This
+    should yield an acceptable upper limit on the complexity of most
+    complex scenes.</p>
+  <p align="CENTER" style="margin-bottom: 0in">
+  </p><div align="center">
+    <img src="assets/images/projects/hc.jpg" name="Graphic1" align="BOTTOM" border="1"></div><p></p>
+  <p><br><br><i>Ray Tracer</i>
+  </p>
+  <p>The geometry will be loaded into an Octree to accelerate the
+    intersection routines. The ray tracer will use the typical Ray
+    Tracing technique by shooting rays from the eye, through the
+    screen pixels and into the scene. The Octree will provide a quick
+    intersection with surfaces in the scene. Then the ray tracer will
+    analyze the properties of the intersection object. Based on this
+    information it will ascertain whether it's necessary to recurse to
+    obtain the reflected light. This will automatically be cutoff at a
+    specified recursion level. The reflection rays will be shot in
+    varying ways. We will store a reflection index which indicates how
+    "perfect" the patch reflects light. We will always shoot
+    16 rays, but the angle from the perfect reflection ray to the
+    actual rays shot will be determined by the index. The greater the
+    angle, the less perfect of a reflection is shot. Once all of the
+    specular data has been obtained at a particular intersection, it
+    will be combined with the diffuse information stored from the
+    radiosity solution.
+  </p>
+  <hr>
+  <p><b>5 Results</b></p>
+  <p><i>Radiosity</i>
+  </p>
+  <p style="margin-bottom: 0in"></p><div align="center"><img src="assets/images/projects/3pass.jpg" name="Graphic2"></div>
+  <br>This image shows the cornel box after 3 passes. It looks very
+  close to a full solution and we are quite proud of this image. The
+  light on the roof really shows off the radiosity approach, as well
+  as the color bleeding.
+  <p></p>
+  <hr>
+  <p style="margin-bottom: 0in">
+  </p><div align="center">
+    <img src="assets/images/projects/2pass_softshaddow.jpg" name="Graphic3"></div>
+  <br>This image shows the cornel box after 2 passes. It was taken
+  to show the accurate computation of soft shadows.
+  <p></p>
+  <hr>
+  <p style="margin-bottom: 0in"><br>
+  </p><div align="center"><img src="assets/images/projects/room1.jpg" name="Graphic4"></div>
+  <br><div align="center"><img src="assets/images/projects/room1a.jpg" name="Graphic5"></div>
+  This image shows a a typical indoor scene. The artifacts along the
+  edge of the pillars show a flaw in the lightmap method where
+  opengl interpolates to a black color which is on the edge of the
+  lightmap's triangle. However, the tables look amazing and in
+  general the scene's lighting looks very realistic.
+  <p></p>
+  <hr>
+  <p><br>( missing octree graphic )
+
+    <br>This is the only scene we currently have that shows off the
+    ray tracing algorithm. It shows an opengl rendering of the
+    axis-aligned bounding boxes that form the octree for a spider
+    mesh. This really shows off the adaptive nature of an octree, as
+    the space where geometry is really crowded, are subdivided even
+    further and low polygon areas.
+  </p>
+  <p>As you can see our engine is not yet complete. We will tweaking
+    the radiosity algorithm to remove the artifacts and merging the
+    ray-tracing algorithm with the radiosity solution, in the next few
+    days and expect to have this fully working by our demo on friday.
+  </p>
+  <p><b>6 Conclusion</b></p>
+  <p><i>Radiosity</i>
+  </p>
+  <p>Implementing radiosity in hardware using OpenGL has turned out
+    to be much harder than originally anticipated. OpenGL is not well
+    suited to the algorithm, and much care must be taken to use it
+    correctly. It does lend itself well to generating the hemicube
+    from points on the triangles, however this information cannot be
+    read directly from the texture memory. To solve this we had to
+    render the hemicube to the screen and read the frame buffer
+    memory. However this clamps all values to 0.0-1.0. This does not
+    allow really bright lights to be used, and care must be taken to
+    use the correct model when dealing with this.
+  </p>
+  <p>Once the hemicube is generated this information is combined
+    into a single pixel value in the lightmap which pertains to the
+    current point on the triangle. The only problem encountered in
+    this was the alias problem where the middle of a lightmap pixel
+    related to a point in object space that did not receive any light.
+    However part of that lightmap pixel is included in the triangle's
+    u-v texture mapping space. This create artifacts along edges of
+    walls and and in corners. Care was then taken to correctly sample
+    these edges in the lightmaps to generate the correct light at that
+    position.
+  </p>
+  <p><b>Performance</b>
+  </p>
+  <p>Our program operates at an efficiency that is dependent on the
+    area of the scene that requires sampling. In this manor we can
+    operate somewhat independent of the triangle complexity of the
+    scene. If we had time to integrate the octree into the radiosity
+    solution, we could then only pass visible geometry to the hemicube
+    renderer. In this manor we would more be affected by the
+    additional lightmaps that needed to be sampled and not by the
+    complexity of the scene.</p>
+  <p>The advantage of our stratagy is that it allows you to
+    adaptively choose heuristics. These include:
+  </p>
+  <ul>
+    <li><p style="margin-bottom: 0in">Size of the hemicube.
+    </p>
+    </li><li><p>Triangle Area to lightmap ratio.
+    </p>
+  </li></ul>
+  <p>To further improve the performance we only sample points that
+    will be in the triangle. The algorithm to determine this
+    relationship can be done in 2D texture space and is thus way
+    faster then the inner angle theorem in 3D. We had planned a
+    further improvement but failed in the time we have left to
+    implement it. This improvement would allow you to sample every N
+    number of pixels on the grid in your first pass through the map.
+    You then look at the bilinear difference in the samples that you
+    have taken. If they are within a threshold then you take simply
+    interpolate. If they are not then you sample again in between
+    these points. Full details on this can be found on Hugo Elias
+    <a href="http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm">website</a>.
+  </p>
+  <p>Another advantage is that after every pass you can walk your
+    camera around the room in real time and check for an problems thus
+    far in the solution. If you are happy with the current solution
+    you can save the lightmaps out to disk and begin the program on
+    another pass.</p>
+  <p>Edge Artifacts.</p>
+  <p>
+  </p><div align="center"><img src="assets/images/projects/box3.jpg" name="Graphic7"></div>
+  <br>
+  <div align="center">
+    <img src="assets/images/projects/prob.jpg" name="Graphic8">
+  </div>
+  <p></p>
+  <p>Sampling the pixel at position A yields a result that is inside
+    the triangle and looking at the light. Sampling at position B
+    gives us in many occasions a sample from inside the wall ( or
+    totally black ). Once we interpolate the result we have an edge
+    that fades to black. The solution to this is to detect the
+    boundary cases and sample for point B a sample from right on the
+    triangles edge.</p>
+  <p>This problem should be fixed by Friday :)
+  </p>
+  <p><i>Ray-Tracing</i>
+  </p>
+  <p>Unfortunately the ray-tracing part of the system has not yet
+    produced any usable results. The geometry is loaded into an
+    octree, and the intersection tests for the octree have been
+    perfected which yields reasonably fast times on models of medium
+    size. However the light model to combine the specular and diffuse
+    lighting from the radiosity has not yet been implemented to a
+    usable state. We have included a picture of an OpenGL rendering of
+    the Axis-Aligned Bounding Boxes for the octree which was created
+    for a 21,000 face mesh. The mesh is not rendered to show you how
+    the geometry is centered.
+  </p>
+  <hr>
+  <p><b>7. List of References</b></p>
+  <ul>
+    <li><p>Hugo
+      Elias<br><a href="http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm">http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm</a></p>
+    </li><li><p>Radiosity on Graphics Hardware<br>Greb Coombe, Mark J.
+      Harris, Anselme Lastra<br>Department of Computer Science,
+      University of North Carolina, Chapel Hill, North Carolina, USA</p>
+    </li><li><p><a href="http://pages.cpsc.ucalgary.ca/~mario/W03-CL-591/project/proposal/Auger_Wecker/PR/5-radiosity/readings/p75-cohen.pdf">A
+      progressive refinement approach to fast radiosity image
+      generation</a><br>Michael F. Cohen, Shenchang Eric Chen, John R.
+      Wallace, Donald P. Greenberg<br>SIGGRAPH '88, Pages: 75 - 84</p>
+    </li><li><p>Wallace, John R., Michael F. Cohen, Donald P. Greenberg<br>A
+      Two-Pass Solution to the Rendering Equation: A Synthesis of Ray
+      Tracing and Radiosity Methods<br>Proceedings of SIGGRAPH'87, In
+      Computer Graphics, Vol. 21, No. 4, July 1987, pp. 311-320</p>
+    </li><li><p>Cook, Robert L., Porter, Thomas, Carpenter
+      Loren<br>Distributed Ray Tracing<br>In Computer Graphics, Vol.
+      18, No. 3, July 1984, pp. 137-145
+    </p>
+  </li></ul>
+
+
+
+</article>
+
+
+  </div>
+
+</article>
+
+
+
+    <article>
+  <h1>water simulation</h1>
+  <p>Name: Water Simulation<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p>This was a really fun project to work on.  The main idea for the movement of the water came
+    from one of my favorite sites on the net:
+    <a href="http://freespace.virgin.net/hugo.elias/graphics/x_water.htm">The good-looking textured light-sourced bouncy fun smart and stretchy page</a>.
+    Once I got the water moving correctly the next step was to get some form of texturing working on it.
+    For the water colour I multi-textured the floor of the pool with a fake sky.  This is done by constantly taking the look
+    vector and bending it by the <a href="http://www.ps.missouri.edu/rickspage/refract/refraction.html">refractive index of water</a>
+    and noticing where this vector now intersects with the wall off the pool.
+  </p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/water.jpg" alt="project picture"></div>
+  <p>I really encourage anyone to try this type of a project, it is really very rewarding.  If anyone would like more
+    information then the very little that I provided, please contact me corey(at)coreyauger.com.</p>
+</article>
+
+
+<article>
+  <h1>collision detection 2</h1>
+  <p>Name: Marble Run<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p></p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/marble.jpg" alt="project picture"></div>
+  <p></p>
+</article>
+
+
+<article>
+  <h1>subdivision</h1>
+  <p>Name: Subdivision Sand Box<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p>This is a project that I did as an assignment for cpsc 553 (Graphics 2).  The project specification was just to
+    create a grid that we could then preform uniform subdivisions.  To make it a little more interesting I created a
+    scene of a sandbox.  The models were read in as (*.obj) files and positioned in the sand.  The user could then subdivide
+    the sand into smoother and smoother curves.</p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/subdiv_sand.jpg" alt="project picture"></div>
+  <p>In addition to this I allowed you to rotate the camera around the scene and zoom in and out.  You could also toggle
+    the visibility of the lines that make up the wire frame mesh of the sand.</p>
+
+  <p>This ended up being a fun project.  You could take it a little further with some texture mapping and better
+    lighting.  If anyone else has done a project similar or would like to ask any questions on anything that was done, I would be
+    more then happy to help out.</p>
+</article>
+
+
+<article>
+  <h1>md2 file animation</h1>
+  <p>Name: MD2 Animator<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p>This project loads md2 (quake 2) models and allows you to loop through the animation sequences.  MD2 model format basically
+    consists of a bunch of Points at different "key frames".  To animate between them I used linear interpolation between each
+    of the key frames.  This was a fun little project that you could end up using to load models into your own game.  There are
+    a bunch of free tools out there to work with MD2 files and the format is very well documented.</p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/md2.jpg" alt="project picture"></div>
+
+  <p>A major improvement on this type of model, would be to a load model with joints and motion ranges.  This is what most games
+    are doing now and it is how you get the really cool rag doll physics when you shoot up some character.</p>
+
+</article>
+
+
+<article>
+  <h1>loop subdivision+</h1>
+  <p>Name: Loop Subdivision<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p></p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/project_loop.jpg" alt="project picture"></div>
+  <p></p>
+</article>
+
+
+<article>
+  <h1>key frame animator</h1>
+  <p>Name: Key Framer<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p></p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/keyframe.jpg" alt="project picture"></div>
+  <p></p>
+</article>
+
+
+<article>
+  <h1>collision detection</h1>
+  <p>Name: Plinko Fun<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p></p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/plinko.jpg" alt="project picture"></div>
+  <p></p>
+</article>
+
+
+
+<article>
+  <h1>cloth simulation</h1>
+  <p>Name: Cloth Simulation<br>
+    Language: C/C++<br>
+    API: OpenGL<br>
+    Platform: Windows<br>
+  </p>
+
+  <p>Another really fun project.  This was a project that I had to do for my computer science (Animation) class.
+    We implemented a mass spring model to simulate the cloth.  I then drop the cloth from above a sphere and watch
+    the collision take place.  I added some texturing and a reflection in the floor to make it look a little more
+    realistic.  Looks really kewl when you see it in motion though.</p>
+
+  <p>Here is a screen shot of the project.</p><p>
+  </p><div align="center"><img src="assets/images/projects/cloth.jpg" alt="project picture"></div>
+  <p>It would be fun to make a full physic system to play with, possibly for a game engine.  I find that playing
+    with physics in your graphics simulations is one of the more rewarding projects in the end.</p>
+
+</article>

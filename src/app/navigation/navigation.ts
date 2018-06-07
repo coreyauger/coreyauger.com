@@ -47,6 +47,12 @@ export const navigation = [
                 'url'  : '/project/flexfwd'
             },
             {
+                'id'   : 'frost',
+                'title': 'Frost',
+                'type' : 'item',                
+                'url'  : '/project/frost'
+            },
+            {
                 'id'   : 'aftercad',
                 'title': 'AfterCAD',
                 'type' : 'item',                

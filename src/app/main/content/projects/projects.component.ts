@@ -22,11 +22,14 @@ export class ProjectsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.contentSubscription = this.contentService.getContent(this.id)
-      .subscribe(content => {
-        this.content = content;
-      });   
+    this.route.paramMap.subscribe(
+      params => {
+        this.id = params.get('id');
+        this.contentSubscription = this.contentService.getContent(this.id).subscribe(content => {
+          this.content = content;
+        }); 
+      });
+      
   }
 
 }
