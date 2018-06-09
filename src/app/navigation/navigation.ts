@@ -9,7 +9,8 @@ export const navigation = [
     {
         'id'      : 'projects',
         'title'   : 'Projects',
-        'type'    : 'group',
+        'type'     : 'collapse',
+        'icon'     : 'code',
         'children': [    
             {
                 'id'   : 'githum',
@@ -67,9 +68,24 @@ export const navigation = [
         ]
     },
     {
+        'id'      : 'ml',
+        'title'   : 'Machine Learning',
+        'type'     : 'collapse',
+        'icon'     : 'functions',
+        'children': [
+            {
+                'id'   : 'stock_mlp',
+                'title': 'Stock MLP',
+                'type' : 'item',                
+                'url'  : '/project/stock_mlp'
+            },
+        ]
+    },
+    {
         'id'      : 'games',
         'title'   : 'Games',
-        'type'    : 'group',
+        'type'     : 'collapse',
+        'icon'     : 'games',
         'children': [
             {
                 'id'   : 'game1',
@@ -78,11 +94,12 @@ export const navigation = [
                 'url'  : '/projects'
             },
         ]
-    },
+    },    
     {
         'id'      : 'design',
         'title'   : 'Design',
-        'type'    : 'group',
+        'type'     : 'collapse',
+        'icon'     : 'image',
         'children': [
             {
                 'id'   : 'design1',

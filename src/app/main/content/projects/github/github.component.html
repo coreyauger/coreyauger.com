@@ -45,6 +45,10 @@
 
             </div>
           -->
+            <div style="position: absolute; width:100%; padding-top:200px;">
+              <mat-spinner style="margin-left: auto; margin-right: auto; "></mat-spinner>
+            </div>
+            
             <div class="repos" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
 
                 <div class="repo" *ngFor="let repo of filteredRepos" fxFlex="100" fxFlex.gt-xs="50"
@@ -80,15 +84,12 @@
 
                     </div>
 
-                </div>
-
-                <div class="no-repos" *ngIf="filteredRepos.length === 0">
-                    No repos found!
-                </div>
+                </div>                
 
             </div>
 
         </div>
+ 
 
     </div>
     <!-- / CONTENT -->
