@@ -82,6 +82,20 @@ export const navigation = [
         ]
     },
     {
+        'id'      : 'lab',
+        'title'   : 'Lab',
+        'type'     : 'collapse',
+        'icon'     : 'build',
+        'children': [
+            {
+                'id'   : 'stock_mlp',
+                'title': 'Stock MLP',
+                'type' : 'item',                
+                'url'  : '/project/stock_mlp'
+            },
+        ]
+    },
+    {
         'id'      : 'games',
         'title'   : 'Games',
         'type'     : 'collapse',
