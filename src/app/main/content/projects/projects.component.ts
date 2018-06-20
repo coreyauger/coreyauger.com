@@ -1,15 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContentService } from '../../../content.service';
 import { Subscription } from 'rxjs';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'fuse-app-projects',
   templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss']
+  styleUrls: ['./projects.component.scss'],
+  animations   : fuseAnimations
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
 
   contentSubscription: Subscription;
   @Input() content: string;  
@@ -30,6 +32,11 @@ export class ProjectsComponent implements OnInit {
         }); 
       });
       
+  }
+
+
+  ngOnDestroy(){
+    this.contentSubscription.unsubscribe();      
   }
 
 }

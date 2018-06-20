@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-lab',
+  selector: 'fuse-app-lab',
   templateUrl: './lab.component.html',
   styleUrls: ['./lab.component.scss']
 })

@@ -16,6 +16,7 @@ import { FuseMainModule } from './main/main.module';
 import { FuseSampleModule } from './main/content/sample/sample.module';
 import { HomeModule } from './main/content/home/home.module';
 import { ProjectsModule } from './main/content/projects/projects.module';
+import { LabModule } from './main/content/lab/lab.module';
 
 const appRoutes: Routes = [
     {
@@ -41,7 +42,8 @@ const appRoutes: Routes = [
         FuseMainModule,
         FuseSampleModule,
         HomeModule,
-        ProjectsModule
+        ProjectsModule,
+        LabModule
     ],
     bootstrap   : [
         AppComponent

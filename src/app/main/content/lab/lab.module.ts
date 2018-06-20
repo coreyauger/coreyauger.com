@@ -8,6 +8,7 @@ import { GithubService } from '../../../github.service';
 import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
 import { QuestionComponent } from './question/question.component';
 import { LabComponent } from './lab.component';
+import { QuestionDetailsComponent } from './question-details/question-details.component';
 
 const routes = [
   {
@@ -20,12 +21,12 @@ const routes = [
   },
   {
     path     : 'question/:id',
-    component: QuestionComponent
+    component: QuestionDetailsComponent
   },
 ];
 
 @NgModule({
-  declarations: [QuestionComponent, LabComponent],
+  declarations: [QuestionComponent, LabComponent, QuestionDetailsComponent],
   providers: [GithubService],
   imports     : [
       RouterModule.forChild(routes),

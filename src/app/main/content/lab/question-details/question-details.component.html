@@ -1,0 +1,58 @@
+<div id="faq" class="page-layout simple" fusePerfectScrollbar>
+
+    <div *ngIf="!question" style="position: absolute; width:100%; padding-top:200px;">
+      <mat-spinner style="margin-left: auto; margin-right: auto; "></mat-spinner>
+    </div>
+
+  <!-- HEADER -->
+  <div class="header mat-accent-bg p-16 p-sm-24" *ngIf="question" fxLayout="column" fxLayoutAlign="center center">
+
+      <div class="hero-text mb-32">
+          <h1>Question: {{question.id}}</h1>
+          <h3>{{question.question}}</h3>
+      </div>
+
+      
+
+  </div>
+  <!-- / HEADER -->
+
+  <!-- CONTENT -->
+  <div *ngIf="question" class="content px-16 py-24 px-sm-24 py-sm-32">
+
+    <h3>Question</h3>
+    <mat-card>{{question.question}}</mat-card>
+
+    <h3>Hints</h3>
+    <mat-accordion class="faqs-accordion">
+
+          <mat-expansion-panel *ngFor="let h of question.hints; let i = index" [expanded]="step === i" (opened)="setStep(i)">
+              <mat-expansion-panel-header>
+                  <mat-panel-title flex fxLayout="row" fxLayoutAlign="start center">
+                      <mat-icon class="mr-8">help_outline</mat-icon>
+                      Hint {{i}}
+                  </mat-panel-title>
+              </mat-expansion-panel-header>
+              {{h}}
+          </mat-expansion-panel>
+    </mat-accordion>
+
+    <h3>Solution</h3>
+    <mat-expansion-panel *ngFor="let s of question.solution; let i = index" [expanded]="step === i" (opened)="setStep(i)">
+      <mat-expansion-panel-header>
+          <mat-panel-title flex fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="mr-8">help_outline</mat-icon>
+              Solution
+          </mat-panel-title>
+      </mat-expansion-panel-header>
+      {{question.solution}}
+    </mat-expansion-panel>
+
+    <div style="float: right;">
+    <button (click)="navigateRandomQuestion()" mat-button>Next</button>
+  </div>
+  </div>
+  <!-- / CONTENT -->
+
+</div>
+

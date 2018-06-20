@@ -1,3 +1,63 @@
-<p>
-  question works!
-</p>
+<div class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+      <!-- CONTENT HEADER -->
+      <div class="header white-fg p-24" fxLayout="row" fxLayoutAlign="start center">
+          <h2>PROGRAMMING STUDY QUESTIONS</h2>
+      </div>
+      <!-- / CONTENT HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card mat-white-bg">
+
+          <!-- CONTENT TOOLBAR -->
+          <div class="toolbar px-24 py-8">
+              <span>Select Categories and Choose Next for Random Practise Question</span>
+          </div>
+          <!-- / CONTENT TOOLBAR -->
+
+          <!-- CONTENT -->
+          <div class="content p-24" fusePerfectScrollbar>
+            <div class="demo-content">
+            <div style="display:block;">
+              <button (click)="navigateRandomQuestion()" mat-raised-button>Find me a randome question</button>
+            </div>
+
+            <h2>Select Categories</h2>
+            <ul>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("1") >= 0'>Arrays &amp; Strings</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("2") >= 0'>Linked Lists</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("3") >= 0'>Stacks &amp; Queues</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("4") >= 0'>Trees &amp; Graphs</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("5") >= 0'>Bit Manipulation</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("6") >= 0'>Math &amp; Logic</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("7") >= 0'>Object-Oriented Design</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("8") >= 0'>Recursion &amp; Dynamic Programming</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("9") >= 0'>System Design &amp; Scalability</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("10") >= 0'>Sorting &amp; Searching</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("11") >= 0'>Testing</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("12") >= 0'>C &amp; C++</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("13") >= 0'>Java</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("14") >= 0'>Databases</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("15") >= 0'>Treads &amp; Locks</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("16") >= 0'>Moderate</mat-slide-toggle></li>
+              <li><mat-slide-toggle ngModel name='categories.indexOf("17") >= 0'>Hard</mat-slide-toggle></li>
+            </ul>
+            </div>
+
+          </div>
+          <!-- / CONTENT -->
+
+      </div>
+      <!-- / CONTENT CARD -->
+
+  </div>
+  <!-- / CENTER -->
+
+</div>
