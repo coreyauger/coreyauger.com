@@ -21,10 +21,11 @@ export interface CodingQuestions{
 })
 export class QuestionService {
   questionsUrl = 'assets/data/questions.json';
+  
+
   constructor(private http: HttpClient) { }
 
-  getConfig() {
-    // now returns an Observable of Config
+  getQuestions() {
     return this.http.get<CodingQuestions>(this.questionsUrl);
   }
 }

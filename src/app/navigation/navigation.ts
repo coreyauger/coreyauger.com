@@ -88,10 +88,10 @@ export const navigation = [
         'icon'     : 'build',
         'children': [
             {
-                'id'   : 'stock_mlp',
-                'title': 'Stock MLP',
+                'id'   : 'coding',
+                'title': 'Coding Questions',
                 'type' : 'item',                
-                'url'  : '/project/stock_mlp'
+                'url'  : '/questions'
             },
         ]
     },
