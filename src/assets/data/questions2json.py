@@ -46,6 +46,7 @@ class Question:
         self.solution = ''
         self.solutionRuntime = ''
         self.solutionSpace = ''
+        self.fullSolution = ''
     def appendTxt(self, txt):
         self.question += " " + txt
     def addHints(self, txt):

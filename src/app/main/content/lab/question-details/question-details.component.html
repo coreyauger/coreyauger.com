@@ -37,15 +37,44 @@
           </mat-expansion-panel>
     </mat-accordion>
 
-    <h3>Solution</h3>
-    <mat-expansion-panel *ngFor="let s of question.solution; let i = index" [expanded]="step === i" (opened)="setStep(i)">
-      <mat-expansion-panel-header>
-          <mat-panel-title flex fxLayout="row" fxLayoutAlign="start center">
-              <mat-icon class="mr-8">help_outline</mat-icon>
-              Solution
+    <h3>Solutions</h3>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Solution
           </mat-panel-title>
-      </mat-expansion-panel-header>
-      {{question.solution}}
+          
+        </mat-expansion-panel-header>
+    
+        <div [innerHTML]="question.solution"> </div>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                What is the runtime?
+              </mat-panel-title>
+              <mat-panel-description>
+                Big-O 
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+        
+            <div>
+                {{question.solutionRuntime}}
+            </div>
+            
+          </mat-expansion-panel>
+    </mat-expansion-panel>
+
+    
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Full Solution
+          </mat-panel-title>
+          
+        </mat-expansion-panel-header>
+    
+        <div [innerHTML]="question.fullSolution"> </div>       
     </mat-expansion-panel>
 
     <div style="float: right;">

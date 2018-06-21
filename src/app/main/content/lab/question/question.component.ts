@@ -49,4 +49,8 @@ export class QuestionComponent implements OnInit, OnDestroy {
     });
   }
 
+  resetStorage(){
+    this.questionService.resetRemember();
+  }
+
 }

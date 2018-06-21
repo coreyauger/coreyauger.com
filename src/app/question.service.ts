@@ -9,6 +9,7 @@ export interface Question{
   readonly solution: string;
   readonly solutionRuntime: string;
   readonly solutionSpace: string;
+  readonly fullSolution: string;
   readonly hints: string[];
 }
 
@@ -28,6 +29,11 @@ export class QuestionService {
 
   getQuestions() {
     return this.http.get<CodingQuestions>(this.questionsUrl);
+  }
+
+  resetRemember(){
+    this.completedQuestions = [];
+    localStorage.setItem('completedQuestions', JSON.stringify(this.completedQuestions));
   }
 
   getRandomQuestion( filterCategories: string[] ): Observable<Question> {
