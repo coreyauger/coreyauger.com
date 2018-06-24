@@ -18,7 +18,7 @@ export const navigation = [
                 'type' : 'item',                
                 'url'  : '/github',
                 'badge': {
-                    'title': 112,
+                    'title': 136,
                     'bg'   : '#525e8a',
                     'fg'   : '#FFFFFF'
                 }
@@ -33,7 +33,7 @@ export const navigation = [
                 'id'   : 'daytrader',
                 'title': 'DayTrader.ai',
                 'type' : 'item',                
-                'url'  : '/project/daystrader'
+                'url'  : '/project/daytrader'
             },
             {
                 'id'   : 'playquest',
@@ -74,10 +74,10 @@ export const navigation = [
         'icon'     : 'functions',
         'children': [
             {
-                'id'   : 'stock_mlp',
+                'id'   : 'mlp',
                 'title': 'Stock MLP',
                 'type' : 'item',                
-                'url'  : '/project/stock_mlp'
+                'url'  : '/project/mlp'
             },
         ]
     },
@@ -105,7 +105,7 @@ export const navigation = [
                 'id'   : 'game1',
                 'title': 'Introduction',
                 'type' : 'item',                
-                'url'  : '/projects'
+                'url'  : '/project/game1'
             },
         ]
     },    
@@ -119,7 +119,7 @@ export const navigation = [
                 'id'   : 'design1',
                 'title': 'Introduction',
                 'type' : 'item',                
-                'url'  : '/projects'
+                'url'  : '/project/design1'
             },
         ]
     }

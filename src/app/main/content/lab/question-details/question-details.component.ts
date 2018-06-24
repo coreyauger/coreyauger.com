@@ -40,6 +40,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
 
   navigateRandomQuestion(){
     this.questionService.getRandomQuestion( [] ).subscribe( q => {
+      this.question = q;
       this.router.navigateByUrl('/question/' + q.id);
     });
   }

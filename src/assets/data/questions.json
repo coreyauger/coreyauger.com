@@ -110,10 +110,10 @@
             ],
             "id": "1.9",
             "question": " String Rotation:Assumeyou have a method isSubstringwhich checks if one word is a substring of another. Given two strings, sl and s2, write code to check if s2 is a rotation of sl using only one call to isSubstring (e.g., \"waterbottle\" is a rotation of\"erbottlewat\").",
-            "solution": "",
+            "solution": "<pre>package Q1_09_String_Rotation;\n\npublic class Question {\n\tpublic static boolean isSubstring(String big, String small) {\n\t\tif (big.indexOf(small) >= 0) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\treturn false;\n\t\t}\n\t}\n\t\n\tpublic static boolean isRotation(String s1, String s2) {\n\t    int len = s1.length();\n\t    /* check that s1 and s2 are equal length and not empty */\n\t    if (len == s2.length() && len > 0) { \n\t    \t/* concatenate s1 and s1 within new buffer */\n\t    \tString s1s1 = s1 + s1;\n\t    \treturn isSubstring(s1s1, s2);\n\t    }\n\t    return false;\n\t}\n\t\n\tpublic static void main(String[] args) {\n\t\tString[][] pairs = {{\"apple\", \"pleap\"}, {\"waterbottle\", \"erbottlewat\"}, {\"camera\", \"macera\"}};\n\t\tfor (String[] pair : pairs) {\n\t\t\tString word1 = pair[0];\n\t\t\tString word2 = pair[1];\n\t\t\tboolean is_rotation = isRotation(word1, word2);\n\t\t\tSystem.out.println(word1 + \", \" + word2 + \": \" + is_rotation);\n\t\t}\n\t}\n\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/1_9.png\" />"
         },
         {
             "hints": [
@@ -237,10 +237,10 @@
             ],
             "id": "3.1",
             "question": " Three in One: Describe how you could use a single array to implement three stacks.",
-            "solution": "",
+            "solution": "<pre>package Q3_01_Three_in_One;\n\nimport java.util.EmptyStackException;\n\nimport CtCILibrary.AssortedMethods;\n\npublic class FixedMultiStack {\n\tprivate int numberOfStacks = 3;\n\tprivate int stackCapacity;\n\tprivate int[] values;\n\tprivate int[] sizes;\n\t\n\tpublic FixedMultiStack(int stackSize) {\n\t\tstackCapacity = stackSize;\n\t\tvalues = new int[stackSize * numberOfStacks];\n\t\tsizes = new int[numberOfStacks];\n\t}\n\n\t/* Push value onto stack. */\n\tpublic void push(int stackNum, int value) throws FullStackException {\n\t\t/* Check that we have space for the next element */\n\t\tif (isFull(stackNum)) { \n\t\t\tthrow new FullStackException();\n\t\t}\n\t\t\n\t\t/* Increment stack pointer and then update top value. */\t\t\n\t\tsizes[stackNum]++;\n\t\tvalues[indexOfTop(stackNum)] = value;\t\n\t}\n\n\t/* Pop item from top stack. */\n\tpublic int pop(int stackNum) {\n\t\tif (isEmpty(stackNum)) {\n\t\t\tthrow new EmptyStackException();\n\t\t}\n\t\t\n\t\tint topIndex = indexOfTop(stackNum);\n\t\tint value = values[topIndex]; // Get top\n\t\tvalues[topIndex] = 0; // Clear \n\t\tsizes[stackNum]--; // Shrink\n\t\treturn value;\n\t}\n\n\t/* Return top element. */\n\tpublic int peek(int stackNum) {\n\t\tif (isEmpty(stackNum)) {\n\t\t\tthrow new EmptyStackException();\n\t\t}\t\t\n\t\treturn values[indexOfTop(stackNum)];\n\t}\n\n\t/* Return if stack is empty. */\n\tpublic boolean isEmpty(int stackNum) {\n\t\treturn sizes[stackNum] == 0;\n\t}\n\t\n\t/* Return if stack is full. */\n\tpublic boolean isFull(int stackNum) {\n\t\treturn sizes[stackNum] == stackCapacity;\n\t}\n\t\n\t/* Returns index of the top of the stack. */\n\tprivate int indexOfTop(int stackNum) {\n\t\tint offset = stackNum * stackCapacity;\n\t\tint size = sizes[stackNum];\n\t\treturn offset + size - 1;\n\t}\t\n\t\n\tpublic int[] getValues() {\n\t\treturn values;\n\t}\n\t\n\tpublic int[] getStackValues(int stackNum) {\n\t\tint[] items = new int[sizes[stackNum]];\n\t\tfor (int i = 0; i < items.length; i++) {\n\t\t\titems[i] = values[stackNum * stackCapacity + i];\n\t\t}\n\t\treturn items;\n\t}\n\t\n\tpublic String stackToString(int stackNum) {\n\t\tint[] items = getStackValues(stackNum);\n\t\treturn stackNum + \": \" + AssortedMethods.arrayToString(items);\n\t}\t\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/3_1a.png\" /><br /><img src=\"/assets/images/solutions/3_1b.png\" /><br /><img src=\"/assets/images/solutions/3_1c.png\" /><br />"
         },
         {
             "hints": [
@@ -344,9 +344,7 @@
             "hints": [
                 " #27. 3.2 Observe that the minimum element doesn't change very often. It only changes when a smaller element is added, or when the smallest element is popped.",
                 " #33. 4.4 If you've developed a brute force solution, be careful about its runtime. If you are computing the height of the subtrees for each node, you could have a pretty inefficient algorithm.",
-                " #49. 4.4 What if you could modify the binary tree node class to allow a node to store the height of its subtree?",
-                " #705. 17.23 Describe the runtime of the brute force solution.",
-                " #724. 17.1 You might need to do the add/carry operation more than once. Adding carry to sum might cause new values to carry."
+                " #49. 4.4 What if you could modify the binary tree node class to allow a node to store the height of its subtree?"               
             ],
             "id": "4.4",
             "question": " Check Balanced: Implement a function to check if a binary tree is balanced. For the purposes of this question, a balanced tree is defined to be a tree such that the heights of the two subtrees of any node never differ by more than one.",
@@ -377,10 +375,10 @@
             ],
             "id": "4.6",
             "question": " Successor: Write an algorithm to find the \"next\" node (i.e., in-order successor) of a given node in a binary search tree. You may assume that each node has a link to its parent.",
-            "solution": "",
+            "solution": "<pre>package Q4_06_Successor;\n\nimport CtCILibrary.TreeNode;\n\npublic class Question {\n\n\tpublic static TreeNode inorderSucc(TreeNode n) { \n\t\tif (n == null) return null;\n\t\t\n\t\t// Found right children -> return left most node of right subtree\n\t\tif (n.parent == null || n.right != null) { \n\t\t\treturn leftMostChild(n.right); \n\t\t} else { \n\t\t\tTreeNode q = n;\n\t\t\tTreeNode x = q.parent;\n\t\t\t// Go up until we�re on left instead of right\n\t\t\twhile (x != null && x.left != q) {\n\t\t\t\tq = x;\n\t\t\t\tx = x.parent;\n\t\t\t}\n\t\t\treturn x;\n\t\t}  \n\t} \n\t\t\n\tpublic static TreeNode leftMostChild(TreeNode n) {\n\t\tif (n == null) {\n\t\t\treturn null;\n\t\t}\n\t\twhile (n.left != null) {\n\t\t\tn = n.left; \n\t\t}\n\t\treturn n; \n\t}\n\t\n\tpublic static void main(String[] args) {\n\t\tint[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};\n\t\tTreeNode root = TreeNode.createMinimalBST(array);\n\t\tfor (int i = 0; i < array.length; i++) {\n\t\t\tTreeNode node = root.find(array[i]);\n\t\t\tTreeNode next = inorderSucc(node);\n\t\t\tif (next != null) {\n\t\t\t\tSystem.out.println(node.data + \"->\" + next.data);\n\t\t\t} else {\n\t\t\t\tSystem.out.println(node.data + \"->\" + null);\n\t\t\t}\n\t\t}\n\t}\n\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/4_6.png\" />"
         },
         {
             "hints": [
@@ -497,7 +495,6 @@
         },
         {
             "hints": [
-                " #743. 17.17 Alternatively, you could insert each of the smaller strings into the trie. How would this help you solve the problem? What is the runtime?",
                 " #269. 5.2 How would you get the first digit in \u2022 893? If you multiplied by 10, you'd shift the values over to get 8. 93. What happens if you multiply by 2?",
                 " #297. 5.2 Think about what happens for values that can't be represented accurately in binary."
             ],
@@ -584,16 +581,14 @@
         {
             "hints": [
                 " #366. 5.8 First try the naive approach. Can you set a particular \"pixel\"?",
-                " #387. 6.1 You should be able to have an equation that tells you the heavy bottle based on the weight.",
-                " #384. 5.8 What about the start and end of the line? Do you need to set those pixels individually, or can you set them all at once?",
-                " #397. 6.3 How many black squares are there on the board? How many white squares?"
+                " #384. 5.8 What about the start and end of the line? Do you need to set those pixels individually, or can you set them all at once?"                
             ],
             "id": "5.8",
             "question": " Draw Line: A monochrome screen is stored as a single array of bytes, allowing eight consecutive pixels to be stored in one byte. The screen has width w, where w is divisible by 8 (that is, no byte will be split across rows). The height of the screen, of course, can be derived from the length of the array and the width. Implement a function that draws a horizontal line from ( xl, y) to ( x2, y). The method signature should look something like: drawline(byte[] screen, int width, int xl, int x2, int y)",
-            "solution": "",
+            "solution": "<pre>package Q5_08_Draw_Line;\n\npublic class Question {\n\tpublic static int computeByteNum(int width, int x, int y) {\n\t\treturn (width * y + x) / 8;\n\t}\n\t\n\tpublic static void drawLine(byte[] screen, int width, int x1, int x2, int y) {\n\t\tint start_offset = x1 % 8;\n\t\tint first_full_byte = x1 / 8;\n\t\tif (start_offset != 0) {\n\t\t\tfirst_full_byte++;\n\t\t}\n\t\t\n\t\tint end_offset = x2 % 8;\n\t\tint last_full_byte = x2 / 8;\n\t\tif (end_offset != 7) {\n\t\t\tlast_full_byte--;\n\t\t}\n\t\t\n\t\t// Set full bytes\n\t\tfor (int b = first_full_byte; b <= last_full_byte; b++) {\n\t\t\tscreen[(width / 8) * y + b] = (byte) 0xFF;\n\t\t}\n\t\t\n\t\tbyte start_mask = (byte) (0xFF >> start_offset);\n\t\tbyte end_mask = (byte) ~(0xFF >> (end_offset + 1));\n\t\t\n\t\t// Set start and end of line\n\t\tif ((x1 / 8) == (x2 / 8)) { // If x1 and x2 are in the same byte\n\t\t\tbyte mask = (byte) (start_mask & end_mask);\n\t\t\tscreen[(width / 8) * y + (x1 / 8)] |= mask;\n\t\t} else {\n\t\t\tif (start_offset != 0) {\n\t\t\t\tint byte_number = (width / 8) * y + first_full_byte - 1;\n\t\t\t\tscreen[byte_number] |= start_mask;\n\t\t\t}\n\t\t\tif (end_offset != 7) {\n\t\t\t\tint byte_number = (width / 8) * y + last_full_byte + 1;\n\t\t\t\tscreen[byte_number] |= end_mask;\n\t\t\t} \n\t\t}\n\t}\n\t\n\tpublic static void printByte(byte b) {\n\t\tfor (int i = 7; i >= 0; i--) {\n\t\t\tchar c = ((b >> i) & 1) == 1 ? '1' : '_';\n\t\t\tSystem.out.print(c);\n\t\t}\n\t}\n\t\n\tpublic static void printScreen(byte[] screen, int width) {\n\t\tint height = screen.length * 8 / width;\n\t\tfor (int r = 0; r < height; r++) {\n\t\t\tfor (int c = 0; c < width; c+=8) {\n\t\t\t\tbyte b = screen[computeByteNum(width, c, r)];\n\t\t\t\tprintByte(b);\n\t\t\t}\n\t\t\tSystem.out.println(\"\");\n\t\t}\n\t}\n\t\n\tpublic static void main(String[] args) {\n\t\tint width = 8 * 1;\n\t\tint height = 1;\n\t\tfor (int r = 0; r < height; r++) {\n\t\t\tfor (int c1 = 0; c1 < width; c1++) {\n\t\t\t\tfor (int c2 = c1; c2 < width; c2++) {\n\t\t\t\t\tbyte[] screen = new byte[width * height / 8];\n\n\t\t\t\t\tSystem.out.println(\"row: \" + r + \": \" + c1 + \" -> \" + c2);\n\t\t\t\t\tdrawLine(screen, width, c1, c2, r);\n\t\t\t\t\tprintScreen(screen, width);\n\t\t\t\t\tSystem.out.println(\"\n\n\");\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t}\n\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/5_8.png\" />"
         },
         {
             "hints": [
@@ -809,15 +804,25 @@
         },
         {
             "hints": [
-                " #389. 7.9 The rotate () method should be able to run in 0( 1) time.",
+                " #389. 7.9 The rotate () method should be able to run in 0( 1) time."                   
+            ],
+            "id": "7.9",
+            "question": " Circular Array: Implement a CircularArray class that supports an array-like data structure which can be efficiently rotated. If possible, the class should use a generic type (also called a template), and should support iteration via the standard for (Obj o : circularArray) notation.",
+            "solution": "<pre>package Q7_09_Circular_Array;\n\nimport java.util.Iterator;\n\npublic class CircularArray<T> implements Iterable<T> {\n\tprivate T[] items;\n\tprivate int head = 0;\n\t\n\tpublic CircularArray(int size) {\n\t\titems = (T[]) new Object[size];\n\t}\n\t\n\tprivate int convert(int index) {\n\t\tif (index < 0) {\n\t\t\tindex += items.length;\n\t\t}\n\t\treturn (head + index) % items.length;\n\t}\n\t\n\tpublic void rotate(int shiftRight) {\n\t\thead = convert(shiftRight);\n\t}\n\t\n\tpublic T get(int i) {\n\t\tif (i < 0 || i >= items.length) {\n\t\t\tthrow new java.lang.IndexOutOfBoundsException(\"Index \" + i + \" is out of bounds\");\n\t\t}\n\t\treturn items[convert(i)];\n\t}\n\t\n\tpublic void set(int i, T item) {\n\t\titems[convert(i)] = item;\n\t}\n\t\n\tpublic Iterator<T> iterator() {\n\t\treturn new CircularArrayIterator();\n\t}\n\t\n\tprivate class CircularArrayIterator implements Iterator<T> {\n\t\tprivate int _current = -1;\n\t\t\n\t\tpublic CircularArrayIterator() { }\n\t\t\n\t\t@Override\n\t\tpublic boolean hasNext() {\n\t\t\treturn _current < items.length - 1;\n\t\t}\n\t\t\n\t\t@Override\n\t\tpublic T next() {\n\t\t\t_current++;\n\t\t\treturn (T) items[convert(_current)];\n\t\t}\n\t\t\n\t\t@Override\n\t\tpublic void remove() {\n\t\t\tthrow new UnsupportedOperationException(\"Remove is not supported by CircularArray\");\n\t\t}\n\t}\n}</pre>",
+            "solutionRuntime": "",
+            "solutionSpace": "",           
+            "fullSolution": "<img src=\"/assets/images/solutions/7_9a.png\" /><br /><img src=\"/assets/images/solutions/7_9b.png\" />"
+        },
+        {
+            "hints": [
                 " #351. 7.10 Should number cells, blank cells, and bomb cells be separate classes?",
                 " #361. 7.10 What is the algorithm to place the bombs around the board?",
-                " #377. 7.1 O To place the bombs randomly on the board:Think about the algorithm to shuffle a deck of cards. Can you apply a similar technique?",
+                " #377. 7.1O To place the bombs randomly on the board:Think about the algorithm to shuffle a deck of cards. Can you apply a similar technique?",
                 " #386. 7.10 How do you count the number of bombs neighboring a cell? Will you iterate through all cells?",
                 " #399. 7.10 When you click on a blank cell, what is the algorithm to expand the neighboring cells?"
             ],
-            "id": "7.9",
-            "question": " Circular Array: Implement a CircularArray class that supports an array-like data structure which can be efficiently rotated. If possible, the class should use a generic type (also called a template), and should support iteration via the standard f or (Obj o : circularArray) notation. 7 .10 Minesweeper: Design and implement a text-based Minesweeper game. Minesweeper is the classic single-player computer game where an NxN grid has B mines (or bombs) hidden across the grid. The remaining cells are either blank or have a number behind them. The numbers reflect the number of bombs in the surrounding eight cells. The user then uncovers a cell. If it is a bomb, the player loses. If it is a number, the number is exposed. If it is a blank cell, this cell and all adjacent blank cells (up to and including the surrounding numeric cells) are exposed. The player wins when all non-bomb cells are exposed. The player can also flag certain places as potential bombs. This doesn't affect game play, other than to block the user from accidentally clicking a cell that is thought to have a bomb. (Tip for the reader: if you're not familiar with this game, please play a few rounds on line first.) [IMG MISSING!]",
+            "id": "7.10",
+            "question": " 7.10 Minesweeper: Design and implement a text-based Minesweeper game. Minesweeper is the classic single-player computer game where an NxN grid has B mines (or bombs) hidden across the grid. The remaining cells are either blank or have a number behind them. The numbers reflect the number of bombs in the surrounding eight cells. The user then uncovers a cell. If it is a bomb, the player loses. If it is a number, the number is exposed. If it is a blank cell, this cell and all adjacent blank cells (up to and including the surrounding numeric cells) are exposed. The player wins when all non-bomb cells are exposed. The player can also flag certain places as potential bombs. This doesn't affect game play, other than to block the user from accidentally clicking a cell that is thought to have a bomb. (Tip for the reader: if you're not familiar with this game, please play a few rounds on line first.) <img src=\"/assets/images/solutions/_7_10.png\" />",
             "solution": "",
             "solutionRuntime": "",
             "solutionSpace": "",
@@ -1178,17 +1183,16 @@
         },
         {
             "hints": [
-                " #717. 17.19 Part 2: You might need the quadratic formula. It's not a big deal if you don't remember it. Most people won't. Remember that there is such a thing as good enough.",
                 " #182. 10.2 Two words are anagrams if they contain the same characters but in different orders. How can you put characters in order?",
                 " #263. 10.2 Can you leverage a standard sorting algorithm?",
                 " #342. 10.2 Do you even need to truly \"sort\"? Or is just reorganizing the list sufficient?"
             ],
             "id": "10.2",
             "question": " Group Anagrams: Write a method to sort an array of strings so that all the anagrams are next to each other.",
-            "solution": "",
+            "solution": "<pre>package Q10_02_Group_Anagrams;\n\nimport java.util.ArrayList;\nimport java.util.Arrays;\n\nimport CtCILibrary.AssortedMethods;\nimport CtCILibrary.HashMapList;\n\npublic class QuestionB {\n\tpublic class AnagramComparator implements Comparator<String> {\n\t\tprivate String sortChars(String s) {\n\t\t\tchar[] content = s.toCharArray();\n\t\t\tArrays.sort(content);\n\t\t\treturn new String(content);\n\t\t}\n\t\n\t    public int compare(String s1, String s2) {\n\t    \treturn sortChars(s1).compareTo(sortChars(s2));\n\t    }\n\t}\n\n\tpublic static void sort(String[] array) {\n\t\tHashMapList<String, String> mapList = new HashMapList<String, String>();\n\t\t\n\t\t/* Group words by anagram */\n\t\tfor (String s : array) {\n\t\t\tString key = sortChars(s); \n\t\t\tmapList.put(key, s);\n\t\t}\n\t\t\n\t\t/* Convert hash table to array */\n\t\tint index = 0;\n\t\tfor (String key : mapList.keySet()) {\n\t\t\tArrayList<String> list = mapList.get(key);\n\t\t\tfor (String t : list) {\n\t\t\t\tarray[index] = t;\n\t\t\t\tindex++;\n\t\t\t}\n\t\t}\n\t}\n\t\n\tpublic static String sortChars(String s) {\n\t\tchar[] content = s.toCharArray();\n\t\tArrays.sort(content);\n\t\treturn new String(content);\n\t}\n\t\n\tpublic static void main(String[] args) {\n\t\tString[] array = {\"apple\", \"banana\", \"carrot\", \"ele\", \"duck\", \"papel\", \"tarroc\", \"cudk\", \"eel\", \"lee\"};\n\t\tsort(array);\n\t\tSystem.out.println(AssortedMethods.stringArrayToString(array));\n\t}\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/10_2.png\" />"
         },
         {
             "hints": [
@@ -1403,7 +1407,6 @@
         },
         {
             "hints": [
-                " #470. 17.14 There are actually several approaches. Brainstorm these. It's okay to start off with a naive approach.",
                 " #452. 12.2 Be careful about the null character."
             ],
             "id": "12.2",
@@ -1495,7 +1498,6 @@
         },
         {
             "hints": [
-                " #473. 16.7 Let k be 1 if a > b and O otherwise. If you were given k, could you return the max (without a comparison or if-else logic)?",
                 " #432. 12.10 Imagine we have a sequential set of integers (3, 4, 5, ... ). How big does this set need to be to ensure that one of the numbers is divisible by 16?",
                 " #440. 12.10 How will we free the memory?"
             ],
@@ -1591,7 +1593,6 @@
         {
             "hints": [
                 " #448. 13.7 Consider how you'd implement this first without lambda expressions.",
-                " #467. 17.1 Walk through binary addition by hand (slowly!) and try to really understand what is happening.",
                 " #464. 13.7 Can you do this without a filter operation?"
             ],
             "id": "13.7",
@@ -1702,13 +1703,12 @@
             "solution": "",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/15_1.png\" />"
         },
         {
             "hints": [
                 " #403. 15.2 A context switch is the time spent switching between two processes. This happens when you bring one process into execution and swap out the existing process.",
                 " #407. 15.2 Ideally, we would like to record the timestamp when one process \"stops\" and the time\u00ad stamp when another process \"starts:' But how do we know when this swapping will occur?",
-                " #475. 17.15 Try simplifying this problem: What if you just needed to know the longest word made up of two other words in the list?",
                 " #447. 15.7 Outline the structure for the threads without worrying about synchronizing anything."
             ],
             "id": "15.2",
@@ -1867,10 +1867,10 @@
             ],
             "id": "16.7",
             "question": " Number Max: Write a method that finds the maximum of two numbers. You should not use if-else or any other comparison operator.",
-            "solution": "",
+            "solution": "<pre>package Q16_07_Number_Max;\n\npublic class Question {\n\t/* Flips a 1 to a 0 and a 0 to a 1 */\n\tpublic static int flip(int bit) {\n\t\treturn 1 ^ bit;\n\t}\t\n\t\n\t/* Returns 1 if a is positive, and 0 if a is negative */\n\tpublic static int sign(int a) {\n\t\treturn flip((a >> 31) & 0x1);\n\t}\n\t\n\tpublic static int getMaxNaive(int a, int b) {\n\t\tint k = sign(a - b);\n\t\tint q = flip(k);\n\t\treturn a * k + b * q;\n\t}\n\t\n\tpublic static int getMax(int a, int b) {\n\t\tint c = a - b;\n\t\t\n\t\tint sa = sign(a); // if a >= 0, then 1 else 0\n\t\tint sb = sign(b); // if b >= 0, then 1 else 0\n\t\tint sc = sign(c); // depends on whether or not a - b overflows\n\t\t\n\t\t/* We want to define a value k which is 1 if a > b and 0 if a < b. \n\t\t * (if a = b, it doesn't matter what value k is) */\n\t\t\n\t\tint use_sign_of_a = sa ^ sb; // If a and b have different signs, then k = sign(a)\n\t\tint use_sign_of_c = flip(sa ^ sb); // If a and b have the same sign, then k = sign(a - b)\n\t\t\n\t\t/* We can't use a comparison operator, but we can multiply values by 1 or 0 */\n\t\tint k = use_sign_of_a * sa + use_sign_of_c * sc;\n\t\tint q = flip(k); // opposite of k\n\t\t\n\t\treturn a * k + b * q;\n\t}\t\n\t\n\tpublic static void main(String[] args) {\n\t\tint a = 26;\n\t\tint b = -15;\n\t\t\n\t\tSystem.out.println(\"max_naive(\" + a + \", \" + b + \") = \" + getMaxNaive(a, b));\n\t\tSystem.out.println(\"max(\" + a + \", \" + b + \") = \" + getMax(a, b));\t\t\n\t\t\n\t\ta = -15;\n\t\tb = 2147483647;\n\t\t\n\t\tSystem.out.println(\"max_naive(\" + a + \", \" + b + \") = \" + getMaxNaive(a, b));\n\t\tSystem.out.println(\"max(\" + a + \", \" + b + \") = \" + getMax(a, b));\n\t}\n\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/16_7.png\" />"
         },
         {
             "hints": [
@@ -1979,10 +1979,10 @@
             ],
             "id": "16.15",
             "question": " Master Mind: The Game of Master Mind is played as follows: The computer has four slots, and each slot will contain a ball that is red (R). yellow (Y). green (G) or blue (B). For example, the computer might have RGGB (Slot #1 is red, Slots #2 and #3 are green, Slot #4 is blue). You, the user, are trying to guess the solution. You might, for example, guess YRGB. When you guess the correct color for the correct slot, you get a \"hit:' If you guess a color that exists but is in the wrong slot, you get a \"pseudo-hit:' Note that a slot that is a hit can never count as a pseudo-hit. For example, if the actual solution is RGBY and you guess GGRR, you have one hit and one pseudo-hit. Write a method that, given a guess and a solution, returns the number of hits and pseudo-hits.",
-            "solution": "",
+            "solution": "<pre>package Q16_15_Master_Mind;\n\nimport java.util.Random;\n\npublic class Question {\n\n\tpublic static class Result {\n\t\tpublic int hits;\n\t\tpublic int pseudoHits;\n\t\t\n\t\tpublic Result(int h, int p) {\n\t\t\thits = h;\n\t\t\tpseudoHits = p;\n\t\t}\n\t\t\n\t\tpublic Result() {\n\t\t}\n\t\t\n\t\tpublic String toString() {\n\t\t\treturn \"(\" + hits + \", \" + pseudoHits + \")\";\n\t\t}\n\t};\n\t\n\tpublic static int code(char c) {\n\t\tswitch (c) {\n\t\tcase 'B':\n\t\t\treturn 0;\n\t\tcase 'G':\n\t\t\treturn 1;\n\t\tcase 'R':\n\t\t\treturn 2;\n\t\tcase 'Y':\n\t\t\treturn 3;\n\t\tdefault:\n\t\t\treturn -1;\n\t\t}\n\t}\n\t\n\tpublic static int MAX_COLORS = 4;\n\t\n\tpublic static Result estimate(String guess, String solution) {\n\t\tif (guess.length() != solution.length()) return null;\n\t\tResult res = new Result();\n\t\tint[] frequencies = new int[MAX_COLORS];\n\t\t    \n\t\t/* Compute hits and built frequency table */\n\t\tfor (int i = 0; i < guess.length(); i++) {\n\t\t\tif (guess.charAt(i) == solution.charAt(i)) {\n\t\t\t\tres.hits++;\n\t\t\t} else {\n\t\t\t\t/* Only increment the frequency table (which will be used for pseudo-hits) if\n\t\t\t\t * it's not a hit. If it's a hit, the slot has already been \"used.\" */\n\t\t\t\tint code = code(solution.charAt(i));\n\t\t\t\tif (code >= 0) {\n\t\t\t\t\tfrequencies[code]++;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t\n\t\t/* Compute pseudo-hits */\n\t\tfor (int i = 0; i < guess.length(); i++) {\n\t\t\tint code = code(guess.charAt(i));\n\t\t\tif (code >= 0 && frequencies[code] > 0 && guess.charAt(i) != solution.charAt(i)) {\n\t\t\t\tres.pseudoHits++;\n\t\t\t\tfrequencies[code]--;\n\t\t\t}\n\t\t}\n\t\treturn res;\n\t}\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/16_15.png\" />"
         },
         {
             "hints": [
@@ -2136,11 +2136,11 @@
                 " #694. 16.25 Both a hash table and a doubly linked list would be useful. Can you combine the two?"
             ],
             "id": "16.25",
-            "question": " LRU Cache: Given an arithmetic equation consisting of positive integers, +, -, * and / (no paren\u00ad theses), compute the result. EXAMPLE",
-            "solution": "",
+            "question": " LRU Cache: Design and build a \"least recently used\" cache, which evicts the least recently used item. The cache should map from keys to values (allowing you to insert and retrieve a value associ­ ated with a particular key) and be initialized with a max size. When it is full, it should evict the least recently used item.",
+            "solution": "<pre>package Q16_25_LRU_Cache;\n\nimport java.util.HashMap;\n\npublic class Cache {\t\t\t\n\tprivate int maxCacheSize;\n\tprivate HashMap<Integer, LinkedListNode> map = new HashMap<Integer, LinkedListNode>();\n\tprivate LinkedListNode listHead = null;\n\tpublic LinkedListNode listTail = null;\n\t\n\t\n\tpublic Cache(int maxSize) {\n\t\tmaxCacheSize = maxSize;\n\t}\n\t\n\t/* Get value for key and mark as most recently used. */\n\tpublic String getValue(int key) {\n\t\tLinkedListNode item = map.get(key);\n\t\tif (item == null) {\n\t\t\treturn null;\n\t\t}\n\t\t\n\t\t/* Move to front of list to mark as most recently used. */\n\t\tif (item != listHead) { \n\t\t\tremoveFromLinkedList(item);\n\t\t\tinsertAtFrontOfLinkedList(item);\n\t\t}\n\t\treturn item.value;\n\t}\n\t\n\t/* Remove node from linked list. */\n\tprivate void removeFromLinkedList(LinkedListNode node) {\n\t\tif (node == null) {\n\t\t\treturn;\n\t\t}\n\t\tif (node.prev != null) {\n\t\t\tnode.prev.next = node.next;\n\t\t}\n\t\tif (node.next != null) {\n\t\t\tnode.next.prev = node.prev;\n\t\t}\n\t\tif (node == listTail) {\n\t\t\tlistTail = node.prev;\n\t\t}\n\t\tif (node == listHead) {\n\t\t\tlistHead = node.next;\n\t\t}\t\t\n\t}\n\t\n\t/* Insert node at front of linked list. */\n\tprivate void insertAtFrontOfLinkedList(LinkedListNode node) {\n\t\tif (listHead == null) {\n\t\t\tlistHead = node;\n\t\t\tlistTail = node;\n\t\t} else {\n\t\t\tlistHead.prev = node;\n\t\t\tnode.next = listHead;\n\t\t\tlistHead = node;\n\t\t}\n\t}\n\t\n\t/* Remove key, value pair from cache, deleting from hash table\n\t * and linked list. */\n\tpublic boolean removeKey(int key) {\n\t\tLinkedListNode node = map.get(key);\n\t\tremoveFromLinkedList(node);\n\t\tmap.remove(key);\n\t\treturn true;\n\t}\n\t\n\t/* Put key, value pair in cache. Removes old value for key if\n\t * necessary. Inserts pair into linked list and hash table.*/\n\tpublic void setKeyValue(int key, String value) {\n\t\t/* Remove if already there. */\n\t\tremoveKey(key); \n\t\t\n\t\t/* If full, remove least recently used item from cache. */\n\t\tif (map.size() >= maxCacheSize && listTail != null) {\n\t\t\tremoveKey(listTail.key);\n\t\t}\n\t\t\n\t\t/* Insert new node. */\n\t\tLinkedListNode node = new LinkedListNode(key, value);\n\t\tinsertAtFrontOfLinkedList(node);\n\t\tmap.put(key, node);\n\t}\n\t\n\tpublic String getCacheAsString() {\n\t\tif (listHead == null) return \"\";\n\t\treturn listHead.printForward();\n\t}\n\t\n\tprivate class LinkedListNode {\n\t\tprivate LinkedListNode next;\n\t\tprivate LinkedListNode prev;\n\t\tpublic int key;\n\t\tpublic String value;\n\t\tpublic LinkedListNode(int k, String v) {\n\t\t\tkey = k;\n\t\t\tvalue = v;\n\t\t}\n\t\t\n\t\tpublic String printForward() {\n\t\t\tString data = \"(\" + key + \",\" + value + \")\";\n\t\t\tif (next != null) {\n\t\t\t\treturn data + \"->\" + next.printForward();\n\t\t\t} else {\n\t\t\t\treturn data;\n\t\t\t}\n\t\t}\n\t}\t\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/16_25.png\" />"
         },
         {
             "hints": [],
@@ -2153,13 +2153,8 @@
         },
         {
             "hints": [
-                " #521. 16.26 Can we just process the expression from left to right? Why might this fail?",
-                " #624. 16.26 Multiplication and division are higher priority operations. In an expression like 3*4 + 5*9/2 + 3, the multiplication and division parts need to be grouped together.",
-                " #665. 16.26 Consider thinking about it as, when you get to a multiplication or division sign, jumping to a separate \"process\"to compute the result of this chunk.",
-                " #698. 16.26 You can also maintain two stacks, one for the operators and one for the numbers. You push a number onto the stack every time you see it. What about the operators? When do you pop operators from the stack and apply them to the numbers?",
                 " #467. 17.1 Walk through binary addition by hand (slowly!) and try to really understand what is happening.",
                 " #544. 17.1 You can think about binary addition as iterating through the number, bit by bit, adding two bits, and then carrying over the one if necessary. You could also think about it as grouping the operations. What if you first added each of the bits (without carrying any overflow)? After that, you can handle the overflow.",
-                " #607. 17.16 Iterative solution: If you're careful about what data you really need, you should be able to solve this in O(n) time and 0(1) additional space.",
                 " #628. 17.1 The adding step alone would convert 1 + 1 -> 0, 1 + 0 -> 1, 0 + 1 -> 1, O + O -> O. How do you do this without the+ sign?",
                 " #642. 17.1 You can do the add step with an XOR.",
                 " #664. 17.1 Now focus on the carrying. In what cases will values carry? How do you apply the carry to the number?",
@@ -2171,7 +2166,7 @@
                 " #494. 17.3 If you haven't already, solve 17.2 on page 186.",
                 " #596. 17.3 Try this recursively. Suppose you had an algorithm to get a subset of size m from n - 1 elements. Could you develop an algorithm to get a subset of size m from n elements?"
             ],
-            "id": "23.5",
+            "id": "17.1",
             "question": " 17 .1 Add Without Plus: Write a function that adds two numbers. You should not use+ or any arithmetic operators. 17 .2 Shuffle: Write a method to shuffle a deck of cards. It must be a perfect shuffle-in other words, each of the 52! permutations of the deck has to be equally likely. Assume that you are given a random number generator which is perfect. 17 .3 Random Set: Write a method to randomly generate a set of m integers from an array of size n. Each element must have equal probability of being chosen.",
             "solution": "",
             "solutionRuntime": "",
@@ -2180,20 +2175,53 @@
         },
         {
             "hints": [
-                " #670. 16.6 Think about how you would merge two sorted arrays.",
-                " #659. 17.4 To find the least significant bit of the missing number, note that you know how many 0s and ls to expect. For example, if you see three 0s and three ls in the least significant bit, then the missing number's least significant bit must be a 1. Think about it: in any sequence of 0s and ls, you'd get a 0, then a 1, then a 0, then a 1, and so on.",
-                " #683. 17.4 Once you've identified that the least significant bit is a O (or a 1 ), you can rule out all the numbers without O as the least significant bit. How is this problem different from the earlier part?",
-                " #485. 17.5 It doesn't really matter which letter or number it is. You can simplify this problem to just having an array of As and Bs. You would then be looking for the longest subarray with an equal number of As and Bs.",
-                " #575. 17.20 Another way to think about this is: Can you maintain the bottom half of elements and the top half of elements?",
-                " #679. 16.6 Imagine you had the two arrays sorted and you were walking through them. If the pointer in the first array points to 3 and the pointer in the second array points to 9, what effect will moving the second pointer have on the difference of the pair?",
-                " #677. 17.13 Will the recursive algorithm hit the same subproblems repeatedly? Can you optimize with a hash table?"
+                " #483. 17.2 Try approaching this problem recursively.",
+                " #579. 17.2 Suppose you had a method shuffle that worked on decks up to n - 1 elements. Could you use this method to implement a new shuffle method that works on decks up to n elements?",
+                " #634. 17.2 You could build this algorithm recursively by swapping the nth element for any of the elements before it. What would this look like iteratively?",
+                " #494. 17.3 If you haven't already, solve 17.2 on page 186.",
+                " #596. 17.3 Try this recursively. Suppose you had an algorithm to get a subset of size m from n - 1 elements. Could you develop an algorithm to get a subset of size m from n elements?"
             ],
-            "id": "17.4",
-            "question": " Missing Number: An array A contains all the integers from Oto n, except for one number which is missing. In this problem, we cannot access an entire integer in A with a single operation. The elements of A are represented in binary, and the only operation we can use to access them is \"fetch the jth bit of A[ i ],\"which takes constant time. Write code to find the missing integer. Can you do it inO(n) time? 17 .5 Letters and Numbers: Given an array filled with letters and numbers, find the longest subarray with an equal number of letters and numbers.",
-            "solution": "",
+            "id": "17.2",
+            "question": " 17.2 Shuffle: Write a method to shuffle a deck of cards. It must be a perfect shuffle-in other words, each of the 52! permutations of the deck has to be equally likely. Assume that you are given a random number generator which is perfect.",
+            "solution": "<pre>package Q17_02_Shuffle;\n\nimport CtCILibrary.AssortedMethods;\n\npublic class Question {\n\n\t/* Random number between lower and higher, inclusive */\n\tpublic static int rand(int lower, int higher) { \n\t\treturn lower + (int)(Math.random() * (higher - lower + 1));\n\t}\t\n\t\n\tpublic static int[] shuffleArrayRecursively(int[] cards, int i) {\n\t\tif (i == 0) {\n\t\t\treturn cards;\n\t\t}\n\t\t\n\t\t/* shuffle elements 0 through index - 1 */\n\t\tshuffleArrayRecursively(cards, i - 1);\n\t\tint k = rand(0, i);\t\t\n\t\t\n\t\t/* Swap element k and index */\n\t\tint temp = cards[k];\n\t\tcards[k] = cards[i];\n\t\tcards[i] = temp;\n\t\t\n\t\t/* Return shuffled array */\n\t\treturn cards;\n \t}\n\t\n\tpublic static void shuffleArrayIteratively(int[] cards) { \n\t\tfor (int i = 0; i < cards.length; i++) { \n\t\t\tint k = rand(0, i);\n\t\t\tint temp = cards[k];\n\t\t\tcards[k] = cards[i];\n\t\t\tcards[i] = temp;\n\t\t} \n\t}\n\t\n\tpublic static void main(String[] args) {\n\t\tint[] cards = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};\n\t\tSystem.out.println(AssortedMethods.arrayToString(cards));\n\t\tshuffleArrayIteratively(cards);\n\t\tSystem.out.println(AssortedMethods.arrayToString(cards));\n\t}\n\n}</pre>",
             "solutionRuntime": "",
             "solutionSpace": "",
-            "fullSolution": ""
+            "fullSolution": "<img src=\"/assets/images/solutions/17_2.png\" />"
+        },
+        {
+            "hints": [
+                " #494. 17.3 If you haven't already, solve 17.2 on page 186.",
+                " #596. 17.3 Try this recursively. Suppose you had an algorithm to get a subset of size m from n - 1 elements. Could you develop an algorithm to get a subset of size m from n elements?"
+            ],
+            "id": "17.3",
+            "question": "17.3 Random Set: Write a method to randomly generate a set of m integers from an array of size n. Each element must have equal probability of being chosen.",
+            "solution": "<pre>package Q17_03_Random_Set;\n\nimport CtCILibrary.AssortedMethods;\n\npublic class QuestionAlternate {\n\n\t/* Random number between lower and higher, inclusive */\n\tpublic static int rand(int lower, int higher) { \n\t\treturn lower + (int)(Math.random() * (higher - lower + 1));\n\t}\n\t\n\t/* pick M elements from original array, using only elements 0 through i (inclusive).*/\n\tpublic static int[] pickMRecursively(int[] original, int m, int i) {\n\t\tif (i + 1 < m) { // Not enough elements\n\t\t\treturn null; \n\t\t} else if (i + 1 == m) { // Base case -- copy first m elements into array\n\t\t\tint[] set = new int[m];\n\t\t\tfor (int k = 0; k < m; k++) {\n\t\t\t\tset[k] = original[k];\n\t\t\t}\n\t\t\treturn set;\n\t\t} else {\n\t\t\tint[] set = pickMRecursively(original, m, i - 1);\n\t\t\tint k = rand(0, i);\n\t\t\tif (k < m) {\n\t\t\t\tset[k] = original[i];\n\t\t\t}\n\t\t\treturn set;\n\t\t}\n\t}\t\n\n\t/* pick M elements from original array.*/\n\tpublic static int[] pickMIteratively(int[] original, int m) {\n\t\tint[] subset = new int[m];\n\t\t\n\t\t/* Fill in subset array with first part of original array */\n\t\tfor (int i = 0; i < m ; i++) {\n\t\t\tsubset[i] = original[i];\n\t\t}\n\t\t\n\t\t/* Go through rest of original array. */\n\t\tfor (int i = m; i < original.length; i++) {\n\t\t\tint k = rand(0, i);\n\t\t\tif (k < m) {\n\t\t\t\tsubset[k] = original[i];\n\t\t\t}\n\t\t}\n\t\t\n\t\treturn subset;\n\t}\n\t\n\tpublic static void main(String[] args) {\n\t\tint[] cards = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};\n\t\tSystem.out.println(AssortedMethods.arrayToString(cards));\n\t\tint[] set = pickMIteratively(cards, 4);\n\t\tSystem.out.println(AssortedMethods.arrayToString(set));\n\t}\t\n\n}</pre>",
+            "solutionRuntime": "",
+            "solutionSpace": "",
+            "fullSolution": "<img src=\"/assets/images/solutions/17_3.png\" />"
+        },
+        {
+            "hints": [
+                " #659. 17.4 To find the least significant bit of the missing number, note that you know how many 0s and ls to expect. For example, if you see three 0s and three ls in the least significant bit, then the missing number's least significant bit must be a 1. Think about it: in any sequence of 0s and ls, you'd get a 0, then a 1, then a 0, then a 1, and so on.",
+                " #683. 17.4 Once you've identified that the least significant bit is a O (or a 1 ), you can rule out all the numbers without O as the least significant bit. How is this problem different from the earlier part?"                
+            ],
+            "id": "17.4",
+            "question": " Missing Number: An array A contains all the integers from Oto n, except for one number which is missing. In this problem, we cannot access an entire integer in A with a single operation. The elements of A are represented in binary, and the only operation we can use to access them is \"fetch the jth bit of A[ i ],\"which takes constant time. Write code to find the missing integer. Can you do it in O(n) time?",
+            "solution": "<pre>package Q17_04_Missing_Number;\n\nimport java.util.ArrayList;\nimport java.util.Random;\n\npublic class Question {\n    /* Create a random array of numbers from 0 to n, but skip 'missing' */\n    public static ArrayList<BitInteger> initialize(int n, int missing) {\n        BitInteger.INTEGER_SIZE = Integer.toBinaryString(n).length();\n        ArrayList<BitInteger> array = new ArrayList<BitInteger>();\n        \n        for (int i = 1; i <= n; i++) {\n        \tarray.add(new BitInteger(i == missing ? 0 : i));\n        }\n\n        // Shuffle the array once.\n        for (int i = 0; i < n; i++){\n            int rand = i + (int) (Math.random() * (n-i));\n            array.get(i).swapValues(array.get(rand));\n        }\n        \n        return array;\n    }\n\n\n    public static int findMissing(ArrayList<BitInteger> array) {\n       return findMissing(array, BitInteger.INTEGER_SIZE - 1);\n    }        \n\n    private static int findMissing(ArrayList<BitInteger> input, int column) {\n    \tif (column < 0) { // Base case and error condition\n    \t\treturn 0;\n    \t}\n    \tArrayList<BitInteger> oneBits = new ArrayList<BitInteger>(input.size()/2);\n    \tArrayList<BitInteger> zeroBits = new ArrayList<BitInteger>(input.size()/2);\n        for (BitInteger t : input) {\n            if (t.fetch(column) == 0) {\n                zeroBits.add(t);\n            } else {\n                oneBits.add(t);\n            }\n        }\n        if (zeroBits.size() <= oneBits.size()) {\n        \tint v = findMissing(zeroBits, column - 1);\n        \tSystem.out.print(\"0\");\n            return (v << 1) | 0;\n        } else {\n        \tint v = findMissing(oneBits, column - 1);\n        \tSystem.out.print(\"1\");\n            return (v << 1) | 1;\n        }\n    }\n\n    public static void main(String[] args) {\n        Random rand = new Random(); \n        int n = rand.nextInt(300000) + 1;\n        int missing = rand.nextInt(n+1);\n        ArrayList<BitInteger> array = initialize(n, missing);\n        System.out.println(\"The array contains all numbers but one from 0 to \" + n + \", except for \" + missing);\n        \n        int result = findMissing(array);\n        if (result != missing) {\n            System.out.println(\"Error in the algorithm!\n\" + \"The missing number is \" + missing + \", but the algorithm reported \" + result);\n        } else {\n            System.out.println(\"The missing number is \" + result);\n        }\n    }\n}</pre>",
+            "solutionRuntime": "",
+            "solutionSpace": "",
+            "fullSolution": "<img src=\"/assets/images/solutions/17_4.png\" />"
+        },
+        {
+            "hints": [
+                " #485. 17.5 It doesn't really matter which letter or number it is. You can simplify this problem to just having an array of As and Bs. You would then be looking for the longest subarray with an equal number of As and Bs."
+            ],
+            "id": "17.5",
+            "question": " 17.5 Letters and Numbers: Given an array filled with letters and numbers, find the longest subarray with an equal number of letters and numbers.",
+            "solution": "<pre>package Q17_05_Letters_and_Numbers;\n\npublic class QuestionA {\n\tpublic static char[] extractSubarray(char[] array, int start, int end) {\n\t\tif (start > end) return null;\t\t\n\t\tchar[] subarray = new char[end - start + 1];\n\t\tfor (int i = start; i <= end; i++) {\n\t\t\tsubarray[i - start] = array[i];\n\t\t}\n\t\treturn subarray;\n\t}\n\t\n\tpublic static boolean hasEqualLettersNumbers(char[] array, int start, int end) {\n\t\tint counter = 0;\n\t\tfor (int i = start; i <= end; i++) {\n\t\t\tif (Character.isLetter(array[i])) {\n\t\t\t\tcounter++;\n\t\t\t} else if (Character.isDigit(array[i])) {\n\t\t\t\tcounter--;\n\t\t\t}\n\t\t}\n\t\treturn counter == 0;\n\t}\n\t\n\tpublic static char[] findLongestSubarray(char[] array) {\n\t\tfor (int len = array.length; len > 1; len--) {\n\t\t\tfor (int i = 0; i <= array.length - len; i++) {\n\t\t\t\tif (hasEqualLettersNumbers(array, i, i + len - 1)) {\n\t\t\t\t\treturn extractSubarray(array, i, i + len - 1);\n\t\t\t\t}\n\t\t\t}\n\t\t}\t\n\t\treturn null;\t\n\t}\t\n\t\n\tpublic static void main(String[] args) {\n\t\tchar b = '1';\n\t\tchar a = 'a';\n\t\tchar[] array = {a, b, a, b, a, b, b, b, b, b, a, a, a, a, a, b, a, b, a, b, b, a, a, a, a, a, a, a};\n\t\tfor (int i = 0; i < array.length; i++) {\n\t\t\tSystem.out.print(array[i] + \" \");\n\t\t}\n\t\tSystem.out.println();\n\t\tchar[] max = findLongestSubarray(array);\n\t\tSystem.out.println(max.length);\n\t\tfor (int i = 0; i < max.length; i++) {\n\t\t\tSystem.out.print(max[i] + \" \");\n\t\t}\n\t\tSystem.out.println(\"\nIs Valid? \" + hasEqualLettersNumbers(max, 0, max.length - 1));\n\t}\n\n}</pre>",
+            "solutionRuntime": "",
+            "solutionSpace": "",
+            "fullSolution": "<img src=\"/assets/images/solutions/17_5a.png\" /><br /><img src=\"/assets/images/solutions/17_5b.png\" /><br />"
         },
         {
             "hints": [

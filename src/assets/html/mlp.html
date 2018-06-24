@@ -1,0 +1,449 @@
+<article class=" u-minHeight100vhOffset65 u-overflowHidden postArticle postArticle--full" lang="en"> 
+  <div class="postArticle-content js-postField js-notesSource js-trackedPost" data-post-id="5eaa2432e757" data-source="post_page"
+    data-tracking-context="postPage" data-scroll="native">
+    <section name="c731" class="section section--body section--first section--last">
+      <div class="section-divider">
+        <a href="https://medium.com/@coreyauger/part-4-searching-for-signals-5eaa2432e757">https://medium.com/@coreyauger/part-4-searching-for-signals-5eaa2432e757</a>
+      </div>
+      <div class="section-content">
+       
+        <div class="section-inner sectionLayout--insetColumn">
+          <h1 name="dd13" id="dd13" class="graf graf--h3 graf-after--figure graf--title">Part 4: Searching for&nbsp;Signals</h1>
+          <p name="bf24" id="bf24" class="graf graf--p graf-after--h3">Sign up for the Beta at
+            <a href="http://daytrader.ai" data-href="http://daytrader.ai" class="markup--anchor markup--p-anchor"
+              rel="nofollow noopener" target="_blank">http://daytrader.ai</a> to be among the first to receive AI generated stock data.</p>
+          <p name="5ed5" id="5ed5"
+            class="graf graf--p graf-after--p">In the
+            <a href="https://medium.com/@coreyauger/part-3-generating-training-data-af66070204ac" data-href="https://medium.com/@coreyauger/part-3-generating-training-data-af66070204ac"
+              class="markup--anchor markup--p-anchor" target="_blank">last post</a>, we discussed how daytrader.ai uses high level patterns to generate
+            <a href="https://www.kaggle.com/daytrader/ema-65-crossover"
+              data-href="https://www.kaggle.com/daytrader/ema-65-crossover" class="markup--anchor markup--p-anchor" rel="nofollow noopener"
+              target="_blank">training data</a>. In this post we will start to examine and apply some data cleaning and normalization techniques.
+            Finally, we’ll try to find some signal in our data using a Multi Layer Perceptron and then a LSTM model.</p>
+          <h3
+            name="0ddf" id="0ddf" class="graf graf--h3 graf-after--p">Artificial Neural Network&nbsp;Review</h3>
+          <p name="b8d0" id="b8d0" class="graf graf--p graf-after--h3">For this and future posts we will be diving into machine learning. If you are new to Machine Learning and want
+            to understand the basics to follow along I would suggest the following:</p>
+          <ul class="postList">
+            <li name="893e" id="893e" class="graf graf--li graf-after--p">Crash Course On Multi-Layer Perceptron Neural Networks
+              <a href="https://machinelearningmastery.com/neural-networks-crash-course/"
+                data-href="https://machinelearningmastery.com/neural-networks-crash-course/" class="markup--anchor markup--li-anchor"
+                rel="nofollow noopener" target="_blank">https://machinelearningmastery.com/neural-networks-crash-course/</a>
+            </li>
+            <li name="f464" id="f464" class="graf graf--li graf-after--li">Gradient Descent in a Nutshell
+              <a href="https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0"
+                data-href="https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0" class="markup--anchor markup--li-anchor"
+                rel="nofollow noopener" target="_blank">https://towardsdatascience.com/gradient-descent-in-a-nutshell-eaf8c18212f0</a>
+            </li>
+            <li name="b4f1" id="b4f1" class="graf graf--li graf-after--li">Neural Networks and Deep Learning: [Free book]
+              <a href="http://neuralnetworksanddeeplearning.com/" data-href="http://neuralnetworksanddeeplearning.com/"
+                class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">http://neuralnetworksanddeeplearning.com/</a>
+            </li>
+            <li name="61af" id="61af" class="graf graf--li graf-after--li">Free Preview of our Deep Learning Nanodegree
+              <a href="https://classroom.udacity.com/courses/nd101-preview" data-href="https://classroom.udacity.com/courses/nd101-preview"
+                class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://classroom.udacity.com/courses/nd101-preview</a>
+            </li>
+          </ul>
+          <p name="31a9" id="31a9" class="graf graf--p graf-after--li">The first thing we will need to do in order to start the learning process is some data prep.</p>
+          <h3 name="4233"
+            id="4233" class="graf graf--h3 graf-after--p">Vectorizing our&nbsp;Data</h3>
+          <p name="e65b" id="e65b" class="graf graf--p graf-after--h3">The data I have provided contains 2420 minutes of 1 minute stock data. That entry point or high level condition
+            was detected at point 2400 in the set. From there I provide 20 minutes of future history. Therefore, one of the
+            first things we are going to want to do is to split the data into our feature matrix as well as extract our label
+            vector. The following util code will produce a numpy feature matrix with shape M x N where M=2400 and N is the
+            number of training examples.</p>
+          
+          <h3 name="7d40" id="7d40" class="graf graf--h3 graf-after--figure">Visualizing Some&nbsp;Data</h3>
+          <p name="c4d8" id="c4d8" class="graf graf--p graf-after--h3">At this point it’s a good idea to take a look at some of the data samples. Do they look OK?. I have included a
+            utility method to plot individual training examples. Here is an example:</p>
+          <figure name="8b7b" id="8b7b" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 581px; max-height: 445px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 76.6%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-imageLoaded is-canvasLoaded" data-image-id="1*-V5rz9_ZtmjxgexZS32enA.png"
+                data-width="581" data-height="445" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/1*-V5rz9_ZtmjxgexZS32enA.png?q=20" crossorigin="anonymous"
+                  class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="55"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/1*-V5rz9_ZtmjxgexZS32enA.png"
+                  src="https://cdn-images-1.medium.com/max/800/1*-V5rz9_ZtmjxgexZS32enA.png">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*-V5rz9_ZtmjxgexZS32enA.png">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <p name="3516" id="3516" class="graf graf--p graf-after--figure">You can visualize any training example in the training set using the following method.</p>
+          
+          <h3 name="0564" id="0564" class="graf graf--h3 graf-after--figure">Centering Data</h3>
+          <p name="b12c" id="b12c" class="graf graf--p graf-after--h3">One of the key challenges in a data science problem like this is how to correctly phrase the problem to the machine.
+            The raw data that I have provided includes closing price and volume for a number of stock symbols. One of the
+            first things to notice is that these stocks are valued very differently. For example Amazon shares sell in the
+            range over 1000 dollars per share, whereas Intel stock is trading under 100 dollars. We are going to have to
+            first
+            <em class="markup--em markup--p-em">normalize</em> these values in order to properly compare them. Here are a few ways one could do this:</p>
+          <p name="96fd"
+            id="96fd" class="graf graf--p graf-after--p">
+            <strong class="markup--strong markup--p-strong">Rate of change centering</strong>
+          </p>
+          <p name="4281" id="4281" class="graf graf--p graf-after--p">Here we take the price at time T and divide it by the close price at time T-1 we then subtract 1 from this value.</p>
+          <p
+            name="c5e1" id="c5e1" class="graf graf--p graf-after--p">(price at time T)/(price at time T-1) — 1.0</p>
+          <p name="bfed" id="bfed" class="graf graf--p graf-after--p">Eg:</p>
+          <blockquote name="54c8" id="54c8" class="graf graf--pullquote graf-after--p">2017–10–17T14:18:00.000Z,201.87,55800.0</blockquote>
+          <blockquote name="2cbc" id="2cbc" class="graf graf--pullquote graf-after--pullquote">2017–10–17T14:19:00.000Z,201.21,137786.0</blockquote>
+          <blockquote name="7b09" id="7b09" class="graf graf--pullquote graf-after--pullquote">Price at 14:19 is&nbsp;201.21</blockquote>
+          <blockquote name="b0fe" id="b0fe" class="graf graf--pullquote graf-after--pullquote">Price at 14:18 is&nbsp;201.87</blockquote>
+          <blockquote name="145b" id="145b" class="graf graf--pullquote graf-after--pullquote">(201.21/201.87) — 1.0 =
+            <strong class="markup--strong markup--pullquote-strong">−0.002824859</strong>
+          </blockquote>
+          <p name="ca3b" id="ca3b" class="graf graf--p graf-after--pullquote">After this our data will be positive if the price increased from the last tick and negative if the price decreased
+            from the last tick. You also may note that in most cases the price is a small values close to zero. This is due
+            to the fact that we should not see massive price jumps when looking at the 1 minute time domain.</p>
+          <p name="adac"
+            id="adac" class="graf graf--p graf-after--p">This looks pretty good on the surface, but has some major problems. Think about how a daytrader thinks using ideas
+            of
+            <a href="https://www.investopedia.com/trading/support-and-resistance-basics/" data-href="https://www.investopedia.com/trading/support-and-resistance-basics/"
+              class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">support and resistance</a>. We want to capture the fact that price may return to and then
+            <em class="markup--em markup--p-em">bounce, </em>at certain price points. In the above centering math we lose this correlation since values that
+            have the same price in our data set will no longer be the same value when using the above centering scheme. Instead
+            we want to preserve these values in our new vector so that they have the same magnitude.</p>
+          <p name="eb24" id="eb24"
+            class="graf graf--p graf-after--p">
+            <strong class="markup--strong markup--p-strong">Entrypoint Centering</strong>
+          </p>
+          <p name="b101" id="b101" class="graf graf--p graf-after--p">Here we calculate the rate of change with respect to the entry point of our data. Again the entry point for the
+            example data is when the EMA-15 crossed over the EMA-65. This is going to be the last column of price data in
+            our feature matrix. So now we divide each price by this entry point price and subtract 1 from it.</p>
+          <p name="e6ba"
+            id="e6ba" class="graf graf--p graf-after--p">(price at time T)/(ENTRY POINT PRICE) — 1.0</p>
+          <p name="adb1" id="adb1" class="graf graf--p graf-after--p">This will again give us values that are positive if the price was above the entry point and negative when price
+            was below the entry point, however we preserve the fact that prices of the same value transform to values that
+            are also the same in our centered data set. This is the centering method that I use and have provided the following
+            utility method to center your own data.</p>          
+          <h3 name="6557" id="6557" class="graf graf--h3 graf-after--figure">Normalizing Data</h3>
+          <p name="e2b7" id="e2b7" class="graf graf--p graf-after--h3">In this step we will be using scikit-learn’s
+            <strong class="markup--strong markup--p-strong">Standardization. </strong>From the documentation:</p>
+          <p name="42e1" id="42e1" class="graf graf--p graf-after--p">
+            <strong class="markup--strong markup--p-strong">
+              <em class="markup--em markup--p-em">Standardization</em>
+            </strong>
+            <em class="markup--em markup--p-em"> of datasets is a </em>
+            <strong class="markup--strong markup--p-strong">
+              <em class="markup--em markup--p-em">common requirement for many machine learning estimators</em>
+            </strong>
+            <em class="markup--em markup--p-em"> implemented in scikit-learn; they might behave badly if the individual features do not more or less look like
+              standard normally distributed data: Gaussian with </em>
+            <strong class="markup--strong markup--p-strong">
+              <em class="markup--em markup--p-em">zero mean and unit variance</em>
+            </strong>
+            <em class="markup--em markup--p-em">.</em>
+          </p>
+          <p name="ab18" id="ab18" class="graf graf--p graf-after--p">
+            <em class="markup--em markup--p-em">In practice we often ignore the shape of the distribution and just transform the data to center it by removing
+              the mean value of each feature, then scale it by dividing non-constant features by their standard deviation.</em>
+          </p>
+          
+          <h3 name="6afb" id="6afb" class="graf graf--h3 graf-after--figure">Creating Classes from our&nbsp;Labels</h3>
+          <p name="2e5c" id="2e5c" class="graf graf--p graf-after--h3">Recall that our labels vector is simply the value of that stock after 20 minutes. The above centering code also
+            applied the same centering to our labels. Let’s examine what this really means. First we can plot the distribution
+            curve for our labels.</p>
+          <figure name="19e4" id="19e4" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 517px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 73.8%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="0*7mO4CBoTRoYTQJ_N."
+                data-width="1207" data-height="891" data-action="zoom" data-action-value="0*7mO4CBoTRoYTQJ_N." data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*7mO4CBoTRoYTQJ_N.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="55"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*7mO4CBoTRoYTQJ_N."
+                  src="https://cdn-images-1.medium.com/max/800/0*7mO4CBoTRoYTQJ_N.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*7mO4CBoTRoYTQJ_N.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <p name="f8dc" id="f8dc" class="graf graf--p graf-after--figure">
+            <strong class="markup--strong markup--p-strong">min</strong>: -0.02869251474715062 or 2.9%</p>
+          <p name="6117" id="6117" class="graf graf--p graf-after--p">
+            <strong class="markup--strong markup--p-strong">max</strong>: 0.037285348922177386 or 3.7%</p>
+          <p name="db5c" id="db5c" class="graf graf--p graf-after--p">Most of our data is centered around zero. This is what we expect to see, with the worst possible outcome being
+            a loss of 2.9% of the stock price and the best possible scenario being a gain of 3.7%. It is worth noting that
+            in reality we would always have a Stop loss placed with any trade. In most cases our trade would be around $40000
+            dollars and we would risk about $150. So any time we “lose” this is equivalent to just triggering our STOP. The
+            flip side of this is that our best possible gain of 3.7% yields around $1500 profile.</p>
+         
+          <p name="ec75" id="ec75" class="graf graf--p graf-after--figure">The first few models we create are going to be classifiers, so we want to create N number of classes that represent
+            equal sized
+            <em class="markup--em markup--p-em">buckets </em>from the distribution above. The larger the number of classes, the harder it is going to be to learn.
+            For now we are going to keep the number of classes to 5. This should put 2 classes in the positive range and
+            2 classes in the negative range with the last class representing the large chunk in the middle with values close
+            to zero. This also with 5 classes gives us a baseline for our performance since guessing on average would yield
+            20% accuracy.
+            <strong class="markup--strong markup--p-strong">We are therefore looking to achieve an accuracy greater than 20% as proof of “some” signal</strong>. Once we
+            have located a signal we can start to try to tune.</p>
+          <p name="c47c" id="c47c" class="graf graf--p graf-after--p">Our class labels fall into these buckets:</p>
+          <ul class="postList">
+            <li name="4de7" id="4de7" class="graf graf--li graf-after--p">Class 1: -0.02869 &gt; -0.00204</li>
+            <li name="b2ed" id="b2ed" class="graf graf--li graf-after--li">Class 2: -0.00204 &gt; -0.00058</li>
+            <li name="6ce9" id="6ce9" class="graf graf--li graf-after--li">Class 3: -0.00058 &gt; 0.000453</li>
+            <li name="66e0" id="66e0" class="graf graf--li graf-after--li">Class 4: 0.000453 &gt; 0.001992</li>
+            <li name="d959" id="d959" class="graf graf--li graf-after--li">Class 5: 0.001992 &gt; 0.037285</li>
+          </ul>
+          <p name="2627" id="2627" class="graf graf--p graf-after--li">We then take our label Vector and
+            <a href="https://hackernoon.com/what-is-one-hot-encoding-why-and-when-do-you-have-to-use-it-e3c6186d008f"
+              data-href="https://hackernoon.com/what-is-one-hot-encoding-why-and-when-do-you-have-to-use-it-e3c6186d008f" class="markup--anchor markup--p-anchor"
+              rel="nofollow noopener" target="_blank">One-Hot encode</a> the values. This gives us a final label matrix with each row containing a Vector with 5 entries
+            containing a single 1 in the class column and zeros in every other column.</p>
+          
+          <h3 name="87cb" id="87cb" class="graf graf--h3 graf-after--figure">Training and Test&nbsp;Set</h3>
+          <p name="8021" id="8021" class="graf graf--p graf-after--h3">Now that we have formatted our data and normalized it we can begin to experiment with some different models. To
+            do this we will split our data into a
+            <em class="markup--em markup--p-em">training</em> and
+            <em class="markup--em markup--p-em">test</em> set. We will use the training data to train the model. We will hold out the test set to run through
+            the model and determine how well we are doing on data the model hasn’t ever seen.</p>
+          <p name="999f" id="999f"
+            class="graf graf--p graf-after--p">This will result in our model producing 2 scores: one for the training set and one for the test set. Generally
+            we can refer to how well the model fits the training data as Bias: A model that fits the training data better
+            has a higher accuracy and thus a lower Bias. We can then refer to how well the model fits the test data as Variance,
+            again higher accuracy on the test set would indicate a lower Variance. Our goal is to have a low Bias and low
+            Variance for our model.</p>
+          <p name="1189" id="1189" class="graf graf--p graf-after--p">For our data it is often easy to achieve a high level of accuracy on the training set (low bias) but very difficult
+            to maintain a high level of accuracy on the test set. We thus have a high variance. This is classically referred
+            to as
+            <em class="markup--em markup--p-em">overfitting the data</em>, and is kinda like saying the model is memorizing the training data but that this does
+            not apply well the generalizing for unseen data. There are lots of way to combat overfitting and we will take
+            a look at a few in the next section. If you would like to learn more about overfitting you can take a look at
+            this post:
+            <a href="https://elitedatascience.com/overfitting-in-machine-learning" data-href="https://elitedatascience.com/overfitting-in-machine-learning"
+              class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://elitedatascience.com/overfitting-in-machine-learning</a>
+          </p>
+          <h3 name="75e7" id="75e7" class="graf graf--h3 graf-after--p">Multi Layer Perceptron</h3>
+          <p name="c70f" id="c70f" class="graf graf--p graf-after--h3">I like to start with simple model designs and build them out slowly, always scaling them back when the simple design
+            does better or equal to a more complex model.</p>
+          
+          <p name="623d" id="623d" class="graf graf--p graf-after--figure">Accuracy</p>
+          <figure name="ddcd" id="ddcd" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 609px; max-height: 469px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 77%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*4yfGnet1mUDF1S2S."
+                data-width="609" data-height="469" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*4yfGnet1mUDF1S2S.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="57"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*4yfGnet1mUDF1S2S.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*4yfGnet1mUDF1S2S.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <p name="3edd" id="3edd" class="graf graf--p graf-after--figure">Loss</p>
+          <figure name="018f" id="018f" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 603px; max-height: 459px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 76.1%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*ShTugYnvCaU6CrCa."
+                data-width="603" data-height="459" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*ShTugYnvCaU6CrCa.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="55"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*ShTugYnvCaU6CrCa.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*ShTugYnvCaU6CrCa.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <p name="a278" id="a278" class="graf graf--p graf-after--figure">We are able to achieve 30% accuracy on our test set. This is pretty good considering that the only feature at this
+            point is price. It also provides some evidence that there is a signal in our dataset. One problem with our network
+            above is that is it is unable to remember anything it has seen in the time series that might potentially help
+            to make a prediction later on.</p>
+          <h3 name="7727" id="7727" class="graf graf--h3 graf-after--p">Recurrent Neural Networks&nbsp;(RNN)</h3>
+          <p name="0863" id="0863" class="graf graf--p graf-after--h3">A recurrent neural network is a special kind of neural network that posses a bit of “memory”. These networks are
+            well suited for time series data, having a lot of success in NLP and Speech tasks. The type of RNN network we
+            will apply is called a Long Short Term Memory. Here is some more information on these types of architecture:</p>
+          <ul
+            class="postList">
+            <li name="f7f7" id="f7f7" class="graf graf--li graf-after--p">The Unreasonable Effectiveness of Recurrent Neural Networks
+              <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/"
+                data-href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" class="markup--anchor markup--li-anchor"
+                rel="nofollow noopener" target="_blank">http://karpathy.github.io/2015/05/21/rnn-effectiveness/</a>
+            </li>
+            <li name="8b36" id="8b36" class="graf graf--li graf-after--li">
+              <a href="https://en.wikipedia.org/wiki/Long_short-term_memory" data-href="https://en.wikipedia.org/wiki/Long_short-term_memory"
+                class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://en.wikipedia.org/wiki/Long_short-term_memory</a>
+            </li>
+          </ul>
+          <p name="c5b3" id="c5b3" class="graf graf--p graf-after--li">There are a number of things to consider when using an RNN which include:
+            <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem"
+              data-href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem" class="markup--anchor markup--p-anchor"
+              rel="nofollow noopener" target="_blank">vanishing gradients</a> and how far back the network can remember. With really high dimensional data (2400 time
+            steps) we will not be able to remember anything useful that far back. One thing we can try to do is the reduce
+            the dimensionality of our data.</p>
+          <h3 name="515a" id="515a" class="graf graf--h3 graf-after--p">Dimensionality Reduction</h3>
+          <p name="e73b" id="e73b" class="graf graf--p graf-after--h3">There are number of methods for reducing the dimensionality of data. One such method is Principal Component Analysis
+            or PCA. PCA projects the points from a higher dimensional space onto a subspace with less dimensions. An example
+            of this would be a set of points in 3 dimensions. We could find a plain surface that best approximates the data
+            and project all the 3d points onto the surface of the plane. We can now represent the points in 2D. We are going
+            to apply PCA to out data to reduce the dimension before feeding it in to the RNN network. PCA however remains
+            a poor choice to reduce our data with. Since each feature is a 1 minute time slice PCA will be looking for features
+            over the entire space that provide little variance to the data set. Said another way, PCA might find that minute
+            55 provides the least significant change over the entire training set, however there still might be a small number
+            of example that minute 55 was key to understanding that specific example.</p>
+          <p name="0016" id="0016" class="graf graf--p graf-after--p">We will first try our LSTM model using PCA to reduce the dimension and in later posts we will talk about smarter
+            methods for reducing the dimensionality.</p>
+          <h3 name="120a" id="120a" class="graf graf--h3 graf-after--p">LSTM Model</h3>
+         
+          <p name="6b29" id="6b29" class="graf graf--p graf-after--figure">Our LSTM model fails to do any better then our MLP. I suspect this is due to the our poor choice of dimensionality
+            reduction at this point. These models are far more time consuming to train so I also stopped the training at
+            35 epochs. There are a
+            <em class="markup--em markup--p-em">ton </em>of things we could tune before giving up on this style of model and we will be looking at that in future
+            posts.</p>
+          <figure name="1dcc" id="1dcc" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 696px; max-height: 588px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 84.5%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="1*xBYUhzXZymkR0e4uihvH1w.png"
+                data-width="696" data-height="588" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/1*xBYUhzXZymkR0e4uihvH1w.png?q=20" crossorigin="anonymous"
+                  class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="62"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/1*xBYUhzXZymkR0e4uihvH1w.png">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*xBYUhzXZymkR0e4uihvH1w.png">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <figure name="ee14" id="ee14" class="graf graf--figure graf-after--figure">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 533px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 76.2%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="1*C2Uj_BXobviZUbixOa9l2g.png"
+                data-width="776" data-height="591" data-action="zoom" data-action-value="1*C2Uj_BXobviZUbixOa9l2g.png" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/1*C2Uj_BXobviZUbixOa9l2g.png?q=20" crossorigin="anonymous"
+                  class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="55"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/1*C2Uj_BXobviZUbixOa9l2g.png">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*C2Uj_BXobviZUbixOa9l2g.png">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <h3 name="271a" id="271a" class="graf graf--h3 graf-after--figure">Results</h3>
+          <p name="2b98" id="2b98" class="graf graf--p graf-after--h3">Despite the low accuracy on our test set these results provide a good base. Let’s think again about what we are
+            trying to do. We only want to take on a trades that we think will yield high returns (we will talk about shorting
+            in another post). The means we want to take trades that have class label 5. If we use our model to predict for
+            this class should be right almost 30% of the time. This leaves us to determine just how
+            <em class="markup--em markup--p-em">wrong </em>we are for the other 70%. If we assume an equal distribution over the other classes 1,2,3,4 this means
+            that 35% of the time we predict class 1 or 2 and the other 35% we predict class 2 or 3. In which case we are
+            only hitting our STOP 35% of the time and the other 35% we are yielding small or no profits and not a STOP loss.</p>
+          <p
+            name="1463" id="1463" class="graf graf--p graf-after--p">We can test this by singling out class 5 from our test set and plotting the actual predictions that were made for
+            that class.</p>
+          <figure name="29b9" id="29b9" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 605px; max-height: 462px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 76.4%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*alrrUNAaj6-aE_Rc."
+                data-width="605" data-height="462" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*alrrUNAaj6-aE_Rc.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="55"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*alrrUNAaj6-aE_Rc.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*alrrUNAaj6-aE_Rc.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <p name="f1cd" id="f1cd" class="graf graf--p graf-after--figure">As you can see the most common mistake for class 5 is in fact class 1. This is rather unfortunate, but challenges
+            me to think of why that might be. Let’s dig in a bit more to see what might be going on here.</p>
+          <p name="dc1d"
+            id="dc1d" class="graf graf--p graf-after--p">Here is the what the distribution looks for some of the other classes</p>
+          <figure name="60f5" id="60f5" class="graf graf--figure graf-after--p">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 577px; max-height: 464px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 80.4%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*SWZeljgpGoZAkbsz."
+                data-width="577" data-height="464" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*SWZeljgpGoZAkbsz.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="60"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*SWZeljgpGoZAkbsz.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*SWZeljgpGoZAkbsz.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <figure name="f4d4" id="f4d4" class="graf graf--figure graf-after--figure">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 596px; max-height: 457px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 76.7%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*JLMjy9cF-cn5SLT9."
+                data-width="596" data-height="457" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*JLMjy9cF-cn5SLT9.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="57"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*JLMjy9cF-cn5SLT9.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*JLMjy9cF-cn5SLT9.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <figure name="9984" id="9984" class="graf graf--figure graf-after--figure">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 583px; max-height: 465px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 79.80000000000001%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*L-3wh-_usInek3tg."
+                data-width="583" data-height="465" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*L-3wh-_usInek3tg.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="57"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*L-3wh-_usInek3tg.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*L-3wh-_usInek3tg.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <figure name="1244" id="1244" class="graf graf--figure graf-after--figure">
+            <div class="aspectRatioPlaceholder is-locked" style="max-width: 597px; max-height: 459px;">
+              <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 76.9%;"></div>
+              <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded" data-image-id="0*FOdxSehwo0X3dwJR."
+                data-width="597" data-height="459" data-scroll="native">
+                <img src="https://cdn-images-1.medium.com/freeze/max/30/0*FOdxSehwo0X3dwJR.?q=20" crossorigin="anonymous" class="progressiveMedia-thumbnail js-progressiveMedia-thumbnail">
+                <canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="57"></canvas>
+                <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*FOdxSehwo0X3dwJR.">
+                <noscript class="js-progressiveMedia-inner">
+                  <img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*FOdxSehwo0X3dwJR.">
+                </noscript>
+              </div>
+            </div>
+          </figure>
+          <p name="e1b2" id="e1b2" class="graf graf--p graf-after--figure">In particular we notice expected distributions for all classes except 1 and 5. This leads me to believe that we
+            are skewing the data with outliers. These are the stocks at the far end of the positive and negative return distribution.
+            The fact that they are outliers leads me to believe that these price movements were in response to some external
+            market driving force (eg: Trump putting tariffs on Chinese goods etc). One thing we can try and do is to crop
+            the positive and negative outliers out of the class they are in and add them to their own class. We will look
+            into this more in a future post.</p>
+          <p name="345a" id="345a" class="graf graf--p graf-after--p">At this point it might be worth forward testing out model to see how well it does on real time data. I will post
+            results from this and other tests in future posts.</p>
+          <h3 name="32fc" id="32fc" class="graf graf--h3 graf-after--p">Tuning</h3>
+          <p name="469a" id="469a" class="graf graf--p graf-after--h3">Now that we have what appears to be a weak signal in our data, we can begin to apply some techniques to tune into
+            this signal. One of the first things to try and do will be to get more data. If we expand our search using more
+            market symbols we should be able to double or even triple the amount of training data. From here we can spend
+            more time trimming outliers and try to identify further indicators (apply indexes to computer RSI). There are
+            a number of other things we can do to try and fight the high variance in our model.</p>
+          <h3 name="11f4" id="11f4"
+            class="graf graf--h3 graf-after--p">Summary</h3>
+          <p name="a03d" id="a03d" class="graf graf--p graf-after--h3">This post covered a lot of ground. We first talk about loading the data and the importance of centering the data.
+            We then dive into phrasing some categorical machine learning problems. We first apply a simple Multi Layer Perceptron
+            and later a LSTM models. Early results indicate that there is a signal in our data set, and that even at this
+            low accuracy on our test set we can still use the results to swing odds in our favour.</p>
+          <p name="2f43" id="2f43"
+            class="graf graf--p graf-after--p">One of my motivations in releasing my own data and learning in a series of blog posts was the realization that — though
+            I’m certain that experimentation in machine learning applied to stock market data is taking place — most of that
+            experimentation is not being shared. I don’t believe that there is another place on the web that offers a machine
+            learning model that enables you to apply real-world market predictions, and I’m excited to offer this to you.
+            Make sure you sign up here to be among the first to help transform the cosmos of intraday trading.</p>
+          <p name="eb7b"
+            id="eb7b" class="graf graf--p graf-after--p graf--trailing">In the next post we will introduce some new features (volume and index data), as well as try to exploit the power
+            of a Convolutional Neural Net (CNN) on our data. We will also begin to explore some better techniques for doing
+            smart dimensionality reduction. Finally, I will post results of forward testing the above models we created in
+            a production setting.</p>
+        </div>
+      </div>
+    </section>
+  </div>  
+</article>

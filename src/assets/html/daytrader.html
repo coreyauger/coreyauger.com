@@ -1,0 +1,204 @@
+<section name="54c5" class="section section--body section--first section--last">
+  <div class="section-content">
+  
+    <div class="section-inner sectionLayout--insetColumn">
+      <h1 name="125e" id="125e" class="graf graf--h3 graf-after--figure graf--title">Daytrader.ai — Machine Learning Applied to Intraday&nbsp;Trading</h1>
+      <p name="ce22" id="ce22" class="graf graf--p graf-after--h3">Daytrader.ai is applying machine learning to intraday trading strategies. This blog will serve to outline my notes
+        and learning as I progress deeper into the abyss. There will be short blog entries, technical descriptions source
+        code, and even free data to experiment with. Once you start attacking the problem you will find yourself hooked on
+        coming up with new ways to reframe problems to computers. Consider yourself warned!</p>
+      <p name="a575" id="a575" class="graf graf--p graf-after--p">Sign up for the Beta at
+        <a href="http://daytrader.ai" data-href="http://daytrader.ai" class="markup--anchor markup--p-anchor"
+          rel="nofollow noopener" target="_blank">http://daytrader.ai</a>
+      </p>
+      <p name="0eb0" id="0eb0" class="graf graf--p graf-after--p">Let’s first start with a clear description of the problem we are trying to solve. We’ll then take a look into whether
+        the problem is even truly solvable. After that we can begin to add constraints and dive deeper into the tasks.</p>
+      <h3
+        name="874f" id="874f" class="graf graf--h3 graf-after--p">Problem Description</h3>
+      <p name="d01b" id="d01b" class="graf graf--p graf-after--h3">The problems of financial forecasting can in most cases be simplified to this question:
+        <em class="markup--em markup--p-em">“Given the input value is X, can we predict the future price of something at time t?”</em>
+      </p>
+      <p name="bf8e" id="bf8e" class="graf graf--p graf-after--p">From there, the question to hone in on is this: given the history of securities on the NASDAQ-100, can we predict the
+        price of a security 5, 10 or even 20 minutes into the future? There is a long list of organizations globally trying
+        to apply machine learning techniques to this very problem. However most of them provide little value in answering
+        the question. And almost all data testing and research is conducted secretively, behind closed doors&nbsp;.This does
+        not yield any value. You could be thinking that the lack of value is inherent of the problem itself&nbsp;, believing,
+        perhaps, that “
+        <em class="markup--em markup--p-em">there is no reasonable way to predict the value of the markets</em>”. So before we continue I think we should further
+        refine our premise.</p>
+      <p name="10ac" id="10ac" class="graf graf--p graf-after--p">
+        <strong class="markup--strong markup--p-strong">Day trading</strong> is
+        <a href="https://en.wikipedia.org/wiki/Speculation" data-href="https://en.wikipedia.org/wiki/Speculation"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">speculation</a> in
+        <a href="https://en.wikipedia.org/wiki/Security_%28finance%29" data-href="https://en.wikipedia.org/wiki/Security_(finance)"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">securities</a>, specifically buying and selling
+        <a href="https://en.wikipedia.org/wiki/Financial_instrument" data-href="https://en.wikipedia.org/wiki/Financial_instrument"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">financial instruments</a> within the same
+        <a href="https://en.wikipedia.org/wiki/Trading_day" data-href="https://en.wikipedia.org/wiki/Trading_day"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">trading day</a>. Strictly, day trading is trading
+        <em class="markup--em markup--p-em">only</em> within a day, such that all
+        <a href="https://en.wikipedia.org/wiki/Position_%28finance%29" data-href="https://en.wikipedia.org/wiki/Position_(finance)"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">positions</a> are closed before the market closes for the trading day.</p>
+      <p name="3ee3" id="3ee3" class="graf graf--p graf-after--p">A day trader looks to identify entry and exit position on a stock that has favourable conditions. These favourable
+        conditions will yield many small term profits that add up to large gains. So we first need to convince ourselves
+        of a few things:</p>
+      <ul class="postList">
+        <li name="3db3" id="3db3" class="graf graf--li graf-after--p">Are there people that day trade for a living?</li>
+        <li name="33bf" id="33bf" class="graf graf--li graf-after--li">Do some day traders consistently beat out a buy and hold strategy?</li>
+        <li name="d1d0" id="d1d0" class="graf graf--li graf-after--li">Are these traders identifying trends in the market that allow them to swing odds in their favour?</li>
+      </ul>
+      <p name="582b" id="582b" class="graf graf--p graf-after--li">If we believe that there are people that are able to identify favourable patterns in the market then we should be able
+        to train a machine to perform this task at
+        <span class="markup--quote markup--p-quote is-other" name="93e213e3defb"
+          data-creator-ids="c9afaf646f96">superhuman levels. This is the premise and the goal of daytrader.ai</span>
+      </p>
+      <h3 name="85f9" id="85f9" class="graf graf--h3 graf-after--p">Process</h3>
+      <p name="6629" id="6629" class="graf graf--p graf-after--h3">We need to identify the strategies that successful day traders use to signal entry conditions into the market. As we
+        will learn in future posts this technique can be split into 2 processes:</p>
+      <ol class="postList">
+        <li name="1d21" id="1d21" class="graf graf--li graf-after--p">
+          <strong class="markup--strong markup--li-strong">A high level pattern description</strong>. Here we are simply looking to identify the entry semantics that occur
+          for potentially hundreds of predefined strategies. This is done with a highly scalable and robust time series pattern
+          matcher. (
+          <a href="https://flink.apache.org/" data-href="https://flink.apache.org/" class="markup--anchor markup--li-anchor"
+            rel="nofollow noopener" target="_blank">Apache Flink</a>).</li>
+        <li name="2e94" id="2e94" class="graf graf--li graf-after--li">
+          <strong class="markup--strong markup--li-strong">Machine learning. </strong>Once we have triggered a pattern we can look through our historical data and find all
+          the instances in past that pattern was triggered as well as the outcome (price after 5, 10, 20 min). We can then
+          generate training example for phase 2 of the problem which we use machine learning to create a probability distribution
+          over these past entries.</li>
+      </ol>
+      <p name="6e80" id="6e80" class="graf graf--p graf-after--li">In order to accommodate the search, daytrader.ai has created a distributed platform to perform forward and back testing
+        on the stock market. I will review the architecture and post some youtube videos of the progress along the way. The
+        software allows us to define patterns, visualize and perform searches over the past 20 years of NASDAQ-100.</p>
+      <figure
+        name="67c4" id="67c4" class="graf graf--figure graf-after--p">
+        <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 592px;">
+          <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 84.5%;"></div>
+          <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="0*JGy_aapuoNMHUL1P."
+            data-width="1420" data-height="1200" data-action="zoom" data-action-value="0*JGy_aapuoNMHUL1P." data-scroll="native">
+            <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*JGy_aapuoNMHUL1P."
+              src="https://cdn-images-1.medium.com/max/800/0*JGy_aapuoNMHUL1P.">
+ 
+          </div>
+        </div>
+      </figure>
+      <p name="4bae" id="4bae" class="graf graf--p graf-after--figure">(Screenshot of technology)</p>
+      <h3 name="57dc" id="57dc" class="graf graf--h3 graf-after--p">Trading Pattern&nbsp;Overview</h3>
+      <p name="c659" id="c659" class="graf graf--p graf-after--h3">We can loosely analyze a stock in one of two ways:</p>
+      <ul class="postList">
+        <li name="1bdc" id="1bdc" class="graf graf--li graf-after--p">Fundamental Analysis</li>
+        <li name="448c" id="448c" class="graf graf--li graf-after--li">Technical Analysis</li>
+      </ul>
+      <p name="1087" id="1087" class="graf graf--p graf--startsWithDoubleQuote graf-after--li">“
+        <em class="markup--em markup--p-em">Technical analysis and fundamental analysis are the two main schools of thought when it comes to analyzing the financial
+          markets. As we’ve mentioned, technical analysis looks at the price movement of a security and uses this data to
+          predict future price movements. Fundamental analysis instead looks at economic and financial factors that influence
+          a business. Let’s dive deeper into the details of how these two approaches differ, the criticism against technical
+          analysis, and how technical and fundamental analysis can be used together.”</em>
+      </p>
+      <p name="a431" id="a431" class="graf graf--p graf-after--p">Source:
+        <a href="https://www.investopedia.com/university/technical/techanalysis2.asp" data-href="https://www.investopedia.com/university/technical/techanalysis2.asp"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://www.investopedia.com/university/technical/techanalysis2.asp</a>
+      </p>
+      <p name="3691" id="3691" class="graf graf--p graf-after--p">Day Traders are mostly concerned with technical analysis and as such have developed a large grab bag of tools for analyzing
+        price movement. These are referred to as “technical indicators”, and we will refer to a number of these during this
+        blog series. For a full list of technical indicators take a look at this page here:</p>
+      <p name="cfd9" id="cfd9" class="graf graf--p graf-after--p">
+        <a href="https://www.tradingtechnologies.com/help/x-study/technical-indicator-definitions/list-of-technical-indicators/"
+          data-href="https://www.tradingtechnologies.com/help/x-study/technical-indicator-definitions/list-of-technical-indicators/"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://www.tradingtechnologies.com/help/x-study/technical-indicator-definitions/list-of-technical-indicators/</a>
+      </p>
+      <p name="93b6" id="93b6" class="graf graf--p graf-after--p">Useful indicators:</p>
+      <ul class="postList">
+        <li name="3c3d" id="3c3d" class="graf graf--li graf-after--p">Price</li>
+        <li name="3d84" id="3d84" class="graf graf--li graf-after--li">Volume</li>
+        <li name="6a48" id="6a48" class="graf graf--li graf-after--li">Simple Moving Average (
+          <a href="https://www.investopedia.com/terms/s/sma.asp" data-href="https://www.investopedia.com/terms/s/sma.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">SMA</a>)</li>
+        <li name="a7e8" id="a7e8" class="graf graf--li graf-after--li">Exponential Moving Average (
+          <a href="https://www.investopedia.com/terms/e/ema.asp" data-href="https://www.investopedia.com/terms/e/ema.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">EMA</a>)</li>
+        <li name="99ac" id="99ac" class="graf graf--li graf-after--li">Relative Strength Index (
+          <a href="https://www.investopedia.com/terms/r/rsi.asp" data-href="https://www.investopedia.com/terms/r/rsi.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">RSI</a>)</li>
+        <li name="74ec" id="74ec" class="graf graf--li graf-after--li">Stochastic Oscillator (
+          <a href="https://www.investopedia.com/terms/s/stochasticoscillator.asp" data-href="https://www.investopedia.com/terms/s/stochasticoscillator.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">STOCH</a>)</li>
+        <li name="f242" id="f242" class="graf graf--li graf-after--li">Moving Average Convergence Divergence (
+          <a href="https://www.investopedia.com/terms/m/macd.asp" data-href="https://www.investopedia.com/terms/m/macd.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">MACD</a>)</li>
+      </ul>
+      <p name="33ed" id="33ed" class="graf graf--p graf-after--li">Additional list of useful terminology:</p>
+      <p name="4f84" id="4f84" class="graf graf--p graf-after--p">
+        <a href="https://www.investopedia.com/exam-guide/series-65/trading-securities/trading-terminology.asp" data-href="https://www.investopedia.com/exam-guide/series-65/trading-securities/trading-terminology.asp"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://www.investopedia.com/exam-guide/series-65/trading-securities/trading-terminology.asp</a>
+      </p>
+      <p name="7672" id="7672" class="graf graf--p graf-after--p">Also we will be referring to “Support” and “resistance” a lot in articles. If these terms are not familiar to you then
+        you can take a look at this:
+        <a href="https://www.investopedia.com/trading/support-and-resistance-basics/" data-href="https://www.investopedia.com/trading/support-and-resistance-basics/"
+          class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://www.investopedia.com/trading/support-and-resistance-basics/</a>
+      </p>
+      <p name="05a6" id="05a6" class="graf graf--p graf-after--p">These indicators are built right into most advanced trading packages. Day traders will set up their software in such
+        a way so that it alerts them of a specific condition. Another way of saying this is the
+        <em class="markup--em markup--p-em">indicators are the building blocks that day traders use to define patterns</em>. Here are some examples of places
+        that have defined patterns:</p>
+      <ul class="postList">
+        <li name="da68" id="da68" class="graf graf--li graf-after--p">
+          <a href="https://www.thebalance.com/top-day-trading-entry-strategies-4145808" data-href="https://www.thebalance.com/top-day-trading-entry-strategies-4145808"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">5 Consistent Day Trading Setups (With Charts)</a>
+        </li>
+        <li name="1d03" id="1d03" class="graf graf--li graf-after--li">
+          <a href="https://speedtrader.com/7-popular-stock-chart-patterns/" data-href="https://speedtrader.com/7-popular-stock-chart-patterns/"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">7 popular stock chart patterns</a>
+        </li>
+        <li name="75e2" id="75e2" class="graf graf--li graf-after--li">
+          <a href="https://www.google.ca/search?q=day+trade+patterns&amp;oq=day+trade+patterns" data-href="https://www.google.ca/search?q=day+trade+patterns&amp;oq=day+trade+patterns"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">Many, many more</a>
+        </li>
+      </ul>
+      <p name="9924" id="9924" class="graf graf--p graf-after--li">Let’s dive into one of these patterns referred to as
+        <strong class="markup--strong markup--p-strong">EMA crossover</strong>. In this pattern we are looking for when a faster moving average (say a 15 EMA) crosses over
+        a slower moving average (say a 65 EMA). We are using this as an example mostly because of its simplicity. It easy
+        to both visually see this on a chart as well as define this type of condition to a computer.</p>
+      <figure name="6119"
+        id="6119" class="graf graf--figure graf-after--p">
+        <div class="aspectRatioPlaceholder is-locked" style="max-width: 700px; max-height: 417px;">
+          <div class="aspectRatioPlaceholder-fill" style="padding-bottom: 59.599999999999994%;"></div>
+          <div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="0*R3AGl4CjFTYUKyBr."
+            data-width="1420" data-height="846" data-action="zoom" data-action-value="0*R3AGl4CjFTYUKyBr." data-scroll="native">
+            <img class="progressiveMedia-image js-progressiveMedia-image" data-src="https://cdn-images-1.medium.com/max/800/0*R3AGl4CjFTYUKyBr."
+              src="https://cdn-images-1.medium.com/max/800/0*R3AGl4CjFTYUKyBr.">  
+          </div>
+        </div>
+      </figure>
+      <h3 name="6cec" id="6cec" class="graf graf--h3 graf-after--figure">Summary</h3>
+      <p name="356b" id="356b" class="graf graf--p graf-after--h3">Now that we have framed our problem we can go ahead and start to define how we will collect data for these patterns.
+        In the next post we will talk about some of the specifics for which to create a platform to forward and backtest.
+        data This is an absolute must if you are serious about working with stock data. I will also be posting some public
+        data sets from the platform that people try their own ideas on.</p>
+      <p name="9e6f" id="9e6f" class="graf graf--p graf-after--p">Sign up for the Beta at
+        <a href="http://daytrader.ai" data-href="http://daytrader.ai" class="markup--anchor markup--p-anchor"
+          rel="noopener nofollow" target="_blank">http://daytrader.ai</a>
+      </p>
+      <p name="db0e" id="db0e" class="graf graf--p graf-after--p">Some additional reading:</p>
+      <ul class="postList">
+        <li name="e15a" id="e15a" class="graf graf--li graf-after--p">
+          <a href="https://www.investopedia.com/terms/e/efficientmarkethypothesis.asp" data-href="https://www.investopedia.com/terms/e/efficientmarkethypothesis.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">Efficient Market Hypothesis</a>
+        </li>
+        <li name="be68" id="be68" class="graf graf--li graf-after--li">
+          <a href="https://www.investopedia.com/articles/basics/03/031703.asp" data-href="https://www.investopedia.com/articles/basics/03/031703.asp"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">Market Capitalization</a>
+        </li>
+        <li name="d9d1" id="d9d1" class="graf graf--li graf-after--li">
+          <a href="https://github.com/timestocome/Test-stock-prediction-algorithms" data-href="https://github.com/timestocome/Test-stock-prediction-algorithms"
+            class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">Amazing reading list</a>.</li>
+      </ul>
+      <p name="781e" id="781e" class="graf graf--p graf-after--li graf--trailing">Next:
+        <a href="https://medium.com/@coreyauger/part-2-building-an-analysis-platform-480978fc61f2" data-href="https://medium.com/@coreyauger/part-2-building-an-analysis-platform-480978fc61f2"
+          class="markup--anchor markup--p-anchor" target="_blank">Part 2: Building an Analysis Platform</a>
+      </p>
+    </div>
+  </div>
+</section>

@@ -15,15 +15,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
   questionsSubscription: Subscription;
 
   questions: Question[];  
-  categories: String[
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-  ];
+  categories: String[];
 
   constructor(
     private route: ActivatedRoute,

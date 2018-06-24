@@ -26,7 +26,7 @@
           <div class="content p-24" fusePerfectScrollbar>
             <div class="demo-content">
             <div style="display:block;">
-              <button (click)="navigateRandomQuestion()" mat-raised-button>Find me a randome question</button>
+              <button (click)="navigateRandomQuestion()" mat-raised-button>Find me a random question</button>
             </div>
 
             <h2>Select Categories</h2>
@@ -49,11 +49,13 @@
               <li><mat-slide-toggle ngModel name='categories.indexOf("16") >= 0'>Moderate</mat-slide-toggle></li>
               <li><mat-slide-toggle ngModel name='categories.indexOf("17") >= 0'>Hard</mat-slide-toggle></li>
             </ul>
-            </div>
 
             <div>
                 <button (click)="resetStorage()" mat-button color="warn">Reset local storage</button>
             </div>
+            </div>
+
+           
           </div>
           <!-- / CONTENT -->
 
