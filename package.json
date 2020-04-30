@@ -14,7 +14,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "bundle-report": "webpack-bundle-analyzer dist/stats.json"
+    "bundle-report": "webpack-bundle-analyzer dist/stats.json",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "private": true,
   "dependencies": {
@@ -61,7 +63,8 @@
     "rxjs": "6.1.0",
     "rxjs-compat": "6.1.0",
     "web-animations-js": "2.3.1",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@angular/cli": "6.0.0",
@@ -86,5 +89,6 @@
     "tslint": "5.9.1",
     "typescript": "2.7.2",
     "webpack-bundle-analyzer": "2.11.1"
-  }
+  },
+  "snyk": true
 }
